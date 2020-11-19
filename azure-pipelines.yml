@@ -1,0 +1,79 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  skipCI: $[contains(variables['Build.SourceVersionMessage'], '~skip_ci~')]
+  skipCD: $[contains(variables['Build.SourceVersionMessage'], '~skip_cd~')]
+
+stages:
+- stage: Build
+  condition: eq(variables.skipCI,false)
+  jobs:
+  - job: BuildCode
+
+    steps:
+    - task: NuGetToolInstaller@1
+      displayName: 'Install NuGet Tool'
+
+    - task: NuGetCommand@2
+      displayName: 'Restore Solution'
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      displayName: 'Build Solution'  
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifact(s)'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+
+- stage: Deploy
+  condition: and(succeeded(),eq(variables.skipCD,false))
+  jobs:
+  - job: Deploy
+    steps:
+    - task: DownloadBuildArtifacts@0
+      displayName: 'Download Build Artifact(s)'
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy Web App to Azure'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: '<Your Azure Subscription>'
+        appType: 'webApp'
+        WebAppName: 'app-gwfhnetfw-dev'
+        packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+        AppSettings: '-ida:ClientId $(CLIENTID) -ida:ClientSecret $(CLIENTSECRET) -StorageConnectionString $(STORAGECONNECTIONSTRING) -GwRebuildApiKey $(GWREBUILDAPIKEY)'
+        enableCustomDeployment: true
+        DeploymentType: 'webDeploy'
+        RemoveAdditionalFilesFlag: true
+
+
+
+
+
+    

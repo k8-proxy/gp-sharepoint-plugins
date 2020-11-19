@@ -1,0 +1,14 @@
+[
+    {
+        "id": "2d673367-5881-4f7c-80cc-016e6eb9556c",
+        "type": "FileHandler",
+        "properties": [
+            { "key": "version","value": "2"},
+            { "key": "appIcon", "value": "{\"svg\":\"<application icon>\" },
+            { "key": "fileTypeDisplayName","value": "Glasswall(.NETFW)"},
+            { "key": "fileTypeIcon","value": "{\"svg\":\"<file type icon>\"},
+            { "key": "actions", "value": "[{\"type\":\"custom\",\"url\":\"https://localhost:44362/filehandler/download\",\"displayName\": \"Glasswall Download (.NETFW)\",\"shortDisplayName\": \"Glasswall Download (.NETFW)\", \"availableOn\":{\"file\":{\"extensions\":[\"*\"]}}}]"
+            }
+        ]
+    }
+]
