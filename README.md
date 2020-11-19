@@ -65,7 +65,7 @@ To create a new storage instance and copy the connection string:
 6. Paste this connection string where `[AzureStorageConnectionString]` appears in Web.config.
 
 ### Glasswall Rebuild Api Key
-This sample connects to one of the Glasswall Rebuild Api. You will need an Api Key to rebuild the files. Reacg out to Glasswall Engineering to know how to get the Api Key. To successfully run the sample, you must provide an Api Key in Web.config:
+This sample connects to one of the Glasswall Rebuild Api. You will need an Api Key to rebuild the files. Reach out to Glasswall Engineering to know how to get the Api Key. To successfully run the sample, you must provide an Api Key in Web.config:
 ```xml
 <add key="GwRebuildApiKey" value="[ApiKey]"/>
 ```
