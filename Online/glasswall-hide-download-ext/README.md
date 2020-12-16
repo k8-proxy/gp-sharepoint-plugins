@@ -75,7 +75,7 @@ This solution contains SPFx Extension of Application Customizer type. It execute
 - Click [here](https://pnp.github.io/cli-microsoft365/user-guide/connecting-office-365/) for more information.
 
 ### Configure CI/CD Release Variables
-- Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on [DevOps](https://dev.azure.com/xamariners/Glasswall/_release?_a=releases&view=mine&definitionId=1)
+- Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on DevOps (tbd)
 - Click on Edit.
 - Click on Variables Tab.
 - Update the Variables as per your environment specs.
@@ -85,9 +85,9 @@ This solution contains SPFx Extension of Application Customizer type. It execute
     4. password: Password of the user with administrative permissions on the tenant.
 
 ### Build Package through CI/CD Pipeline
-- Open the Pipeline 'Glasswall-Office365-Hide-Download-CI' on [DevOps](https://dev.azure.com/xamariners/Glasswall/_build?definitionId=156).
+- Open the Pipeline 'Glasswall-Office365-Hide-Download-CI' on DevOps (tbd)
 - Click on Run pipeline
 
 ### Deploy Package through CI/CD Release
-- Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on [DevOps](https://dev.azure.com/xamariners/Glasswall/_release?_a=releases&view=mine&definitionId=1)
+- Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on DevOps (tbd)
 - Open latest Release and Re-Deploy OR Create New Release and Deploy.
