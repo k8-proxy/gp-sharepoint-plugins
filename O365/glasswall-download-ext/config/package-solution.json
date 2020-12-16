@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "glasswall-download-ext-client-side-solution",
+    "id": "4136773d-c20d-4fa4-aa4f-678abb89afbe",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "features": [
+      {
+        "title": "Glasswall Download Extension",
+        "description": "Download with Glasswall.",
+        "id": "96fc417b-8e6c-4e33-b955-85beec9b7504",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ],
+    "webApiPermissionRequests": [
+      {
+      "resource": "Glasswall(.NETFW)",
+      "scope": "user_impersonation"
+      },
+      {
+        "resource": "Glasswall-NetFW-SP",
+        "scope": "User.Read"
+      },
+      {
+        "resource": "Windows Azure Active Directory",
+        "scope": "User.Read"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "User.Read"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/glasswall-download-ext.sppkg"
+  }
+}

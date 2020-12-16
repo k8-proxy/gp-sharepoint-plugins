@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <ClientSideComponentInstance
+        Title="Hide Default Download"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ComponentId="f5b509a9-25de-454b-963a-ef384ebdbbbd"
+        Properties="{&quot;commandName&quot;:&quot;downloadCommand&quot;}">
+    </ClientSideComponentInstance>
+</Elements>

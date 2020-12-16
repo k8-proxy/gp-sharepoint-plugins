@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
+
+  "id": "179276b1-47bf-4fe3-920a-088f8b1fc034",
+  "alias": "GlasswallDownloadCommandSet",
+  "componentType": "Extension",
+  "extensionType": "ListViewCommandSet",
+
+  // The "*" signifies that the version should be taken from the package.json
+  "version": "*",
+  "manifestVersion": 2,
+
+  // If true, the component can only be installed on sites where Custom Script is allowed.
+  // Components that allow authors to embed arbitrary script code should set this to true.
+  // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f
+  "requiresCustomScript": false,
+
+  "items": {
+    "GLASSWALL_DOWNLOAD": {
+      "title": { "default": "Download by Glasswall" },
+      "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA+klEQVQ4T2NkwAGc4m5Ks7D8WfnnD0v4vkXqT3GpYxw1gGFQhcF/RrfYS6K7Fuu/AsUMtmh0i70otmux3msGBsb/sNiDe8E98ZrRf4b/KxiYGFN2zdU6hG6AW/I1O4Z//+cwMjBG7JyvdQ7DAJAAVNFcBibG5D+/me/CEhIL619lhn//weIgw5HTDkYgwgxh/M9Q/5+JIYvxH8O0/4wMjdg0gwzCGgtQQ1YzMDAIMTAwvGNgZEjYNU97O7ZUizMa3ZKuejL8Z5jEwMiQh0szThfAbLIMfcx5fLXsd1z5haAB+DRixAI42pj/HGNgYJDDo/HRn78sVsjZGwBlwJoR7mUTPAAAAABJRU5ErkJggg==",
+      "type": "command"
+    }
+  }
+}

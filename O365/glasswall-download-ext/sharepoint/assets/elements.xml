@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="GlasswallDownload"
+        RegistrationId="101"
+        RegistrationType="List"
+        Location="ClientSideExtension.ListViewCommandSet"
+        ClientSideComponentId="179276b1-47bf-4fe3-920a-088f8b1fc034"
+        ClientSideComponentProperties="{&quot;commandName&quot;:&quot;Download by Glasswall&quot;}">
+    </CustomAction>
+</Elements>

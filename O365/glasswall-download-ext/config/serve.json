@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx",
+      "customActions": {
+        "179276b1-47bf-4fe3-920a-088f8b1fc034": {
+          "location": "ClientSideExtension.ListViewCommandSet",
+          "properties": {
+            "commandName": "One item is selected in the list"
+          }
+        }
+      }
+    },
+    "glasswallDownload": {
+      "pageUrl": "https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx",
+      "customActions": {
+        "179276b1-47bf-4fe3-920a-088f8b1fc034": {
+          "location": "ClientSideExtension.ListViewCommandSet",
+          "properties": {
+            "commandName": "One item is selected in the list"
+          }
+        }
+      }
+    }
+  }
+}

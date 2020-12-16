@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "glasswall-hide-download-ext-client-side-solution",
+    "id": "f8b0195c-c647-409d-a483-10ecc3a4565f",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "features": [
+      {
+        "title": "Hide Default Download",
+        "description": "Hide Default Download button from Commandbar and ContextMenu",
+        "id": "714e7f53-0c75-4b46-a52e-5f0d0bb1adb7",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/glasswall-hide-download-ext.sppkg"
+  }
+}

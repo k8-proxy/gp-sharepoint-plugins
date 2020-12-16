@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx",
+      "customActions": {
+        "27fc07b2-d74d-43c2-abaa-383b2576a476": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    },
+    "embedScripts": {
+      "pageUrl": "https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx",
+      "customActions": {
+        "27fc07b2-d74d-43c2-abaa-383b2576a476": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test message"
+          }
+        }
+      }
+    }
+  }
+}

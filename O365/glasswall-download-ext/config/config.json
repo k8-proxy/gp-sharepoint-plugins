@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "glasswall-download-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/glasswallDownload/GlasswallDownloadCommandSet.js",
+          "manifest": "./src/extensions/glasswallDownload/GlasswallDownloadCommandSet.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "GlasswallDownloadCommandSetStrings": "lib/extensions/glasswallDownload/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="EmbedScripts"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="27fc07b2-d74d-43c2-abaa-383b2576a476"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
