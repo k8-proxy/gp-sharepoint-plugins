@@ -6,14 +6,16 @@ on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+    paths: 
+      - "./Online/glasswall-hide-download-ext/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # Variables that are available for all the jobs in the workflow
 env:
-  SPPKG_FILE_NAME: 'glasswall-hide-download-ext.sppkg'
-  SEND_MAIL: 'true'
+  SPPKG_FILE_NAME: "glasswall-hide-download-ext.sppkg"
+  SEND_MAIL: "true"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,7 +24,7 @@ jobs:
     environment: DEV-Xamarines
     defaults:
       run:
-        working-directory: ./Online/glasswall-hide-download-ext
+        working-directory: "./Online/glasswall-hide-download-ext"
     
     steps:
     # Checkout code
@@ -63,7 +65,7 @@ jobs:
     - name: CLI for Microsoft 365 Deploy App
       uses: pnp/action-cli-deploy@v2.0.0
       with:
-        APP_FILE_PATH: ./Online/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}
+        APP_FILE_PATH: "./Online/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}"
         # SITE_COLLECTION_URL: https://${{ secrets.tenant}}.sharepoint.com/${{secrets.catalogsite}}
         SKIP_FEATURE_DEPLOYMENT: true
         OVERWRITE: true
