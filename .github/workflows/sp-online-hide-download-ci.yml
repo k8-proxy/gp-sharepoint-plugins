@@ -72,5 +72,5 @@ jobs:
     - name: CLI for Microsoft 365 Run Script - Send email
       uses: pnp/action-cli-runscript@v2.0.0
       with:
-         O365_CLI_SCRIPT: m365 spo mail send --webUrl https://${{secrets.tenant}}.sharepoint.com --to "${{secrets.username}}" --subject "Deployment done" --body "<h2>Microsoft 365 CLI</h2> <p>The deployment is complete.</p> <br/> Email sent via Microsoft 365 CLI GitHub Action."
+         M365_CLI_SCRIPT: m365 spo mail send --webUrl https://${{secrets.tenant}}.sharepoint.com --to "${{secrets.username}}" --subject "Deployment done" --body "<h2>Microsoft 365 CLI</h2> <p>The deployment is complete.</p> <br/> Email sent via Microsoft 365 CLI GitHub Action."
       if: env.SEND_MAIL == 'true'
