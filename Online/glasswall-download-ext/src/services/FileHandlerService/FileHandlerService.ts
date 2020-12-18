@@ -7,10 +7,9 @@ export class FileHandlerService implements IFileHandlerService {
     
     public static readonly serviceKey: ServiceKey<IFileHandlerService> = ServiceKey.create<IFileHandlerService>("XN.GW.IFileHandlerService", FileHandlerService);
 
-    private _apiUrl: string = "https://app-gwfhnetfw-dev.azurewebsites.net";
-    private _apiMethodUrl: string = "/filehandler/download";
+    private _webAPIUrl: string = "https://app-gwfhnetfw-dev.azurewebsites.net";
+    private _apiUri = "api://glasswallnetfw";
 
-    // private _PageContext: PageContext;
     private _AadClient: AadHttpClient;
     private _AadHttpClientFactory: AadHttpClientFactory;
 
@@ -19,19 +18,9 @@ export class FileHandlerService implements IFileHandlerService {
 
             console.log("initializing AAD Client...");
             this._AadHttpClientFactory = serviceScope.consume(AadHttpClientFactory.serviceKey);
-            // this._AadHttpClientFactory.getClient(this._apiUrl)
-            this._AadHttpClientFactory.getClient("56808e55-354e-48fc-ad57-7c74a88757c4")
-            .then((client: AadHttpClient) => {
+            this._AadHttpClientFactory.getClient(this._apiUri).then((client: AadHttpClient) => {
                 this._AadClient = client;
             });
-
-			// this._PageContext = serviceScope.consume(PageContext.serviceKey);
-
-			// sp.setup({
-			// 	spfxContext: {
-			// 		pageContext: this._PageContext
-			// 	}
-			// });
 		});
     }
 
@@ -41,7 +30,7 @@ export class FileHandlerService implements IFileHandlerService {
         console.log("headers: " + JSON.stringify(headers));
         console.log("body: " + parameters);
 
-        let targetUrl = this._apiUrl + endpointUrl;
+        let targetUrl = this._webAPIUrl + endpointUrl;
         let options: IHttpClientOptions = {
             method: method,
             headers: new Headers(headers),
