@@ -9,7 +9,8 @@
         "179276b1-47bf-4fe3-920a-088f8b1fc034": {
           "location": "ClientSideExtension.ListViewCommandSet",
           "properties": {
-            "commandName": "One item is selected in the list"
+            "apiUrl": "https://app-gwfhnetfw-dev.azurewebsites.net",
+            "appUri": "api://glasswallnetfw"
           }
         }
       }
@@ -20,7 +21,8 @@
         "179276b1-47bf-4fe3-920a-088f8b1fc034": {
           "location": "ClientSideExtension.ListViewCommandSet",
           "properties": {
-            "commandName": "One item is selected in the list"
+            "apiUrl": "https://app-gwfhnetfw-dev.azurewebsites.net",
+            "appUri": "api://glasswallnetfw"
           }
         }
       }
