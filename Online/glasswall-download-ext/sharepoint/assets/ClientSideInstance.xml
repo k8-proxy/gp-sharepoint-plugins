@@ -4,6 +4,6 @@
         Title="GlasswallDownload"
         Location="ClientSideExtension.ListViewCommandSet"
         ListTemplateId="101"
-        Properties="{&quot;commandName&quot;:&quot;Download by Glasswall&quot;}"
+        Properties="{&quot;apiUrl&quot;:&quot;https://app-gwfhnetfw-dev.azurewebsites.net&quot;, &quot;appUri&quot;:&quot;api://glasswallnetfw&quot;}"
         ComponentId="179276b1-47bf-4fe3-920a-088f8b1fc034" />
 </Elements>

@@ -62,9 +62,7 @@ This solution contains SPFx Extension of Application Customizer type. It execute
 - Open any Document Library.
 - Select any file (click on the checkbox) and then in the toolbar, you will not see the default 'Download' button anymore.
 
-## Build and Deploy Package through CI/CD on DevOps
-
-### Prepare Office365 Tenant for PNP Microsoft365 Management Shell (Microsoft365 CLI)
+## Prepare Office365 Tenant for PNP Microsoft365 Management Shell (Microsoft365 CLI)
 - Open the command-prompt.
 - Install Microsoft365 CLI using command, 'npm install -g @pnp/cli-microsoft365'.
 - Run the following command: m365 login.
@@ -75,6 +73,36 @@ This solution contains SPFx Extension of Application Customizer type. It execute
 - You will now be prompted to consent PNP Microsoft365 Management Shell.
 - Select Accept to consent and complete the sign-in process.
 - Click [here](https://pnp.github.io/cli-microsoft365/user-guide/connecting-office-365/) for more information.
+
+## Build and Deploy Package through GitHub Actions
+
+### Configure Secrets
+- On GitHub, navigate to the main page of the repository.
+- Under your repository name, click Settings.
+- In the left sidebar, click Environments.
+- Click on the Environment you're working with.
+- Update the following secrets listed under Environment Secrets:
+    1. tenant: Tenant name in https://{tenant}.sharepoint.com.
+    2. catalogsite: Server relative Path of the App Catalog Site eg sites/apps.
+    3. username: Username of the user with administrative permissions on the tenant.
+    4. password: Password of the user with administrative permissions on the tenant.
+
+### Build and deploy package
+- On GitHub, navigate to the main page of the repository.
+- Under your repository name, click Actions.
+- In the left sidebar, click on 'SPFx CI-CD with Microsoft365 CLI'
+- You will see option as 'Run workflow' on screen.
+- Click on 'Run workflow' button to start workflow which build and deploy the package.
+
+## Edit GitHub Action
+- On GitHub, navigate to the main page of the repository.
+- Under your repository name, click Actions.
+- In the left sidebar, click on 'SPFx CI-CD with Microsoft365 CLI'
+- Select the three dots(...) besides the latest workflow run item row and then click on 'view workflow file'.
+- Click on Edit button to edit the yml workflow file.
+- Once updated, click on 'Start Commit' to commit your changes to the repository.
+
+## Build and Deploy Package through CI/CD on DevOps
 
 ### Configure CI/CD Release Variables
 - Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on DevOps (tbd).

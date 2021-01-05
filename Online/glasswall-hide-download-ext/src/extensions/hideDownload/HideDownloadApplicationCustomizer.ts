@@ -15,7 +15,6 @@ const LOG_SOURCE: string = 'HideDownloadApplicationCustomizer';
  * You can define an interface to describe it.
  */
 export interface IHideDownloadApplicationCustomizerProperties {
-	// This is an example; replace with your own property
 	commandName: string;
 }
 
@@ -38,20 +37,6 @@ export default class HideDownloadApplicationCustomizer
 				}
 			}, 300);
 		}
-
-		// //For context menu fix
-		// let bodyItems = document.getElementsByTagName("body");
-		// bodyItems[0].addEventListener('DOMNodeInserted', (e) => {
-		// 	let element: any = e.target;
-		// 	if (element.class.indexOf('ms-ContextualMenu-Callout') >= 0) {
-		// 		console.log('context menu dom node inserted');
-		// 		setTimeout(() => {
-		// 			this.hideDownloadButtons();
-		// 		}, 500);
-		// 	}
-		// });
-		
-		//od-ItemContent-list
 		// To hide Download button in Context Menu
 		let listItems = document.getElementsByClassName("od-ItemContent-list");
 		if (listItems.length > 0) {

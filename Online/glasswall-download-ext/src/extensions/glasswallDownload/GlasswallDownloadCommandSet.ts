@@ -6,11 +6,9 @@ import {
 	IListViewCommandSetListViewUpdatedParameters,
 	IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
-import { Dialog } from '@microsoft/sp-dialog';
 
-import * as strings from 'GlasswallDownloadCommandSetStrings';
 import { IFileHandlerService } from '../../services/FileHandlerService/IFileHandlerService';
-import { FileHandlerService } from '../../services/FileHandlerService/FileHandlerService';
+import { GlasswallFileHandlerService } from '../../services/FileHandlerService/FileHandlerService';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -18,87 +16,72 @@ import { FileHandlerService } from '../../services/FileHandlerService/FileHandle
  * You can define an interface to describe it.
  */
 export interface IGlasswallDownloadCommandSetProperties {
-	// This is an example; replace with your own properties
-	commandName: string;
+	apiUrl: string;
+	appUri: string;
 }
 
 const LOG_SOURCE: string = 'GlasswallDownloadCommandSet';
+const GLASSWALL_DOWNLOAD_COMMAND_NAME: string = 'GLASSWALL_DOWNLOAD';
 
 export default class GlasswallDownloadCommandSet extends BaseListViewCommandSet<IGlasswallDownloadCommandSetProperties> {
 
-	private _FileHandleService: IFileHandlerService;
+	private _GlasswallFileHandlerService: IFileHandlerService;
 
 	@override
 	public onInit(): Promise<void> {
 		Log.info(LOG_SOURCE, 'Initialized GlasswallDownloadCommandSet');
 
-		this._FileHandleService = this.context.serviceScope.consume(FileHandlerService.serviceKey);
+		this._GlasswallFileHandlerService = this.context.serviceScope.consume(GlasswallFileHandlerService.serviceKey);
+		if (this.properties.apiUrl != null) {
+			this._GlasswallFileHandlerService.apiUrl = this.properties.apiUrl;
+		}
+		if (this.properties.appUri != null) {
+			this._GlasswallFileHandlerService.appUri = this.properties.appUri;
+		}
 
 		return Promise.resolve();
 	}
 
 	@override
 	public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
-		const gwDownloadCommand: Command = this.tryGetCommand('GLASSWALL_DOWNLOAD');
+		const gwDownloadCommand: Command = this.tryGetCommand(GLASSWALL_DOWNLOAD_COMMAND_NAME);
 		if (gwDownloadCommand) {
-			// This command should be hidden unless exactly one row is selected.
 			gwDownloadCommand.visible = event.selectedRows.length > 0;
 		}
-
-		// Following code is just to test if we can capture default download command in the extension itself
-		// const defaultDownloadCommand: Command = this.tryGetCommand('downloadCommand');
-		// if (defaultDownloadCommand) {
-		// 	console.log("defaultDownloadCommand captured!");
-		// 	defaultDownloadCommand.visible = false;
-		// }
-		// const defaultDownloadCommand2: Command = this.tryGetCommand('Download');
-		// if (defaultDownloadCommand2) {
-		// 	console.log("defaultDownloadCommand2 captured!");
-		// 	defaultDownloadCommand2.visible = false;
-		// }
 	}
 
 	@override
 	public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
 		switch (event.itemId) {
-			case 'GLASSWALL_DOWNLOAD':
+			case GLASSWALL_DOWNLOAD_COMMAND_NAME:
 				let itemURLs: string[] = [];
-				let itemNames: string = '';
-				event.selectedRows.forEach(row => {
-					itemNames = itemNames + row.getValueByName("FileLeafRef") + "\n";
-					// const itemId: string = row.getValueByName("UniqueId");
-					const itemUrl: string = row.getValueByName(".spItemUrl");
-					//"https://xamariners.sharepoint.com:443/_api/v2.0/drives/b!v6JPv0Rb102Wn66JRVNB3pOyg8INDCtEgcAxJ5p4Xe3mMP-1M7gTR4VwfglbUQtx/items/01KK7SSJDKKPGVOAFR4JAIJOYHRZYCUB22?version=Published"
-					const graphUrl: string = this.buildGraphUrl(itemUrl);
-					console.log(graphUrl);
-					itemURLs.push(graphUrl);
-				});
-
-				console.log(`You have selected following files: \n\n${itemNames}`);
-				const encodedUrl: string = encodeURI(itemURLs.join(","));
-				console.log("selected ItemURLs: " + encodedUrl);
-
-				const cultureInfo: string = this.context.pageContext.cultureInfo.currentUICultureName.toLowerCase();
-				const userEmail: string = encodeURIComponent(this.context.pageContext.user.email);
+				event.selectedRows.forEach(row => itemURLs.push(this.buildGraphUrl(row.getValueByName(".spItemUrl"))));
 				
-				const param: string = `cultureName=${cultureInfo}&client=OneDrive&userId=${userEmail}&items=%5B${encodedUrl}%5D`;
-				const headers: any = {
-					'Content-Type': "application/x-www-form-urlencoded"
-				};
-						  
-				this._FileHandleService.executeRequest("post", "/filehandler/download", headers, param);
-
-				// Dialog.alert(`You have selected following files: \n\n${items}`);
+				const param: string = this.prepareHandlerParameters(itemURLs);
+				this._GlasswallFileHandlerService.rebuildFile(param).then(response => {
+					//Successful download
+				}).catch(error => {
+					throw new Error(error);
+				});
 				break;
 			default:
 				throw new Error('Unknown command');
 		}
 	}
 
-	private buildGraphUrl(itemUrl: string): string {
+	private buildGraphUrl(itemUrl: string) {
 		const itemUri: URL = new URL(itemUrl);
 		const drivePath: string = itemUri.pathname.substring(itemUri.pathname.indexOf("/drives/"));
 		const graphUrl: string = `https://graph.microsoft.com/v1.0${drivePath}`;
+		console.log(graphUrl);
 		return graphUrl;
+	}
+
+	private prepareHandlerParameters(itemURLs: string[]) {
+		const encodedUrl: string = encodeURI(`[${itemURLs.join(",")}]`);
+		const cultureInfo: string = this.context.pageContext.cultureInfo.currentUICultureName.toLowerCase();
+		const userEmail: string = encodeURIComponent(this.context.pageContext.user.email);
+
+		return `cultureName=${cultureInfo}&client=OneDrive&userId=${userEmail}&items=${encodedUrl}`;
 	}
 }
