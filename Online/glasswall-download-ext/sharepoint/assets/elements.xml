@@ -6,6 +6,6 @@
         RegistrationType="List"
         Location="ClientSideExtension.ListViewCommandSet"
         ClientSideComponentId="179276b1-47bf-4fe3-920a-088f8b1fc034"
-        ClientSideComponentProperties="{&quot;commandName&quot;:&quot;Download by Glasswall&quot;}">
+        ClientSideComponentProperties="{&quot;apiUrl&quot;:&quot;https://app-gwfhnetfw-dev.azurewebsites.net&quot;, &quot;appUri&quot;:&quot;api://glasswallnetfw&quot;}">
     </CustomAction>
 </Elements>

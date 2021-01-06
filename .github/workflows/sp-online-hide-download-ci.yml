@@ -1,0 +1,78 @@
+# This is a basic workflow to help you get started with Actions
+name: SPFx CI-CD with Microsoft365 CLI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+    paths: 
+      - "Online/glasswall-hide-download-ext/**"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Variables that are available for all the jobs in the workflow
+env:
+  SPPKG_FILE_NAME: "glasswall-hide-download-ext.sppkg"
+  SEND_MAIL: "true"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: DEV-Xamarines
+    defaults:
+      run:
+        working-directory: "./Online/glasswall-hide-download-ext"
+    
+    steps:
+    # Checkout code
+    - name: Checkout code
+      uses: actions/checkout@v1
+      
+      
+    # Setup node.js runtime
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: 10.x
+    
+    # npm install
+    - name: Run npm ci
+      run: npm ci
+    
+    # install gulp if mac
+    - name: Run npm i -g gulp
+      run: npm i -g gulp
+      if: runner.os == 'macOS'
+    
+    # gulp bundle and package solution
+    - name: Bundle and package
+      run: |
+        gulp clean
+        gulp bundle --ship
+        gulp package-solution --ship    
+    
+    # Login to tenant using action-cli-login
+    - name: CLI for Microsoft 365 Login
+      uses: pnp/action-cli-login@v2.0.0
+      with:
+        ADMIN_USERNAME:  ${{secrets.username}}
+        ADMIN_PASSWORD:  ${{secrets.password}}
+    
+    # Deploy package to tenant using action-cli-deploy
+    - name: CLI for Microsoft 365 Deploy App
+      uses: pnp/action-cli-deploy@v2.0.0
+      with:
+        APP_FILE_PATH: "./Online/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}"
+        # SITE_COLLECTION_URL: https://${{ secrets.tenant}}.sharepoint.com/${{secrets.catalogsite}}
+        SKIP_FEATURE_DEPLOYMENT: true
+        OVERWRITE: true
+    
+    # Send an email using action-cli-runscript
+    # - name: CLI for Microsoft 365 Run Script - Send email
+    #   uses: pnp/action-cli-runscript@v2.0.0
+    #   with:
+    #      O365_CLI_SCRIPT: m365 spo mail send --webUrl https://${{secrets.tenant}}.sharepoint.com --to "${{secrets.username}}" --subject "Deployment done" --body "<h2>Microsoft 365 CLI</h2> <p>The deployment is complete.</p> <br/> Email sent via Microsoft 365 CLI GitHub Action."
+    #   if: env.SEND_MAIL == 'true'
