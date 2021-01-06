@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="6bef0167-103a-4727-9bb0-ab524bf324f2" solutionId="6bef0167-103a-4727-9bb0-ab524bf324f2" resetWebServer="false" sharePointProductVersion="19.0" name="Glasswall.FileHandler" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <customAssembly location="Newtonsoft.Json.dll" deploymentTarget="GlobalAssemblyCache" sourcePath="Newtonsoft.Json.dll" />
+  </assemblies>
+  <features>
+    <featureReference itemId="0e12e89f-4e39-44e2-b6db-86c6b04a698e" />
+    <featureReference itemId="ae8ebf73-c788-4eb0-a638-1da837d3b22a" />
+    <featureReference itemId="d22067db-67aa-4ce4-b73f-28aec4c8951f" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="05f5e437-beee-43a6-8b0e-a8853132d0e2" />
+    <projectItemReference itemId="bb983030-4624-4cb1-9540-e4b1e159a53b" />
+    <projectItemReference itemId="c2f804af-4b06-4d10-8a65-ab2d301e7660" />
+  </projectItems>
+</package>

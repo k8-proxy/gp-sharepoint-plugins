@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	<CustomActionGroup
+    Id="CA_Glasswall"
+    Location="Microsoft.SharePoint.Administration.Default"
+    Sequence="100"
+    Title="Glasswall"
+    Description="Glasswall Filehandler settings"
+    ImageUrl="/_layouts/15/IMAGES/Glasswall.FileHandler/GWLogo48.png">
+		<UrlAction Url="_admin/Glasswall.FileHandler/GWsettings.aspx"/>
+	</CustomActionGroup>
+	<CustomAction
+	  Id="CA_Glasswall_Config"
+	  GroupId="CA_Glasswall"
+	  Location="Microsoft.SharePoint.Administration.Default"
+	  Title="Settings"
+	  Description="Application Url and Key configuration">
+		<UrlAction Url="_admin/Glasswall.FileHandler/GWsettings.aspx"/>
+	</CustomAction>
+</Elements>

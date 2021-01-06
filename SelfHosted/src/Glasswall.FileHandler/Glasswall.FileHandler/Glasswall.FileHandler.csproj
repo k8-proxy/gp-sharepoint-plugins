@@ -1,0 +1,139 @@
+﻿<Project ToolsVersion="16.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{217433D5-CF92-4162-93BC-E6AEF6C60981}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Glasswall.FileHandler</RootNamespace>
+    <AssemblyName>Glasswall.FileHandler</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetOfficeVersion>19.0</TargetOfficeVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <MinimumOfficeToolsVersion>14.1</MinimumOfficeToolsVersion>
+    <SandboxedSolution>False</SandboxedSolution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.SharePoint" />
+    <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Features\GWCustomActionCAFeature\GWCustomActionCAFeature.EventReceiver.cs">
+      <DependentUpon>GWCustomActionCAFeature.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\GWFileHandlerFeature\GWFileHandlerFeature.EventReceiver.cs">
+      <DependentUpon>GWFileHandlerFeature.feature</DependentUpon>
+    </Compile>
+    <Compile Include="DownloadFileHandler.cs" />
+    <Compile Include="GlasswallRebuildClient.cs" />
+    <Compile Include="GWConstants.cs" />
+    <Compile Include="GWDocLibEventReceiver\GWDocLibEventReceiver.cs" />
+    <Compile Include="ADMIN\Glasswall.FileHandler\GWSettings.aspx.cs">
+      <DependentUpon>GWSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ADMIN\Glasswall.FileHandler\GWSettings.aspx.designer.cs">
+      <DependentUpon>GWSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GWUtility.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ADMIN\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c2f804af-4b06-4d10-8a65-ab2d301e7660}</SharePointProjectItemId>
+    </None>
+    <None Include="app.config" />
+    <None Include="Features\GWCustomActionCAFeature\GWCustomActionCAFeature.feature">
+      <FeatureId>{d22067db-67aa-4ce4-b73f-28aec4c8951f}</FeatureId>
+    </None>
+    <None Include="Features\GWDocLibFeature\GWDocLibFeature.feature">
+      <FeatureId>{ae8ebf73-c788-4eb0-a638-1da837d3b22a}</FeatureId>
+    </None>
+    <None Include="Features\GWFileHandlerFeature\GWFileHandlerFeature.feature">
+      <FeatureId>{0e12e89f-4e39-44e2-b6db-86c6b04a698e}</FeatureId>
+    </None>
+    <None Include="GWCustomActions\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{9febb4e8-40fe-4e47-80de-4ced1a705e0c}</SharePointProjectItemId>
+    </None>
+    <None Include="GWDocLibEventReceiver\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{40cefb42-e47a-4d8d-bebc-6f68cc7be8af}</SharePointProjectItemId>
+    </None>
+    <None Include="Images\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{05f5e437-beee-43a6-8b0e-a8853132d0e2}</SharePointProjectItemId>
+    </None>
+    <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{bb983030-4624-4cb1-9540-e4b1e159a53b}</SharePointProjectItemId>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Package\Package.package">
+      <PackageId>{6bef0167-103a-4727-9bb0-ab524bf324f2}</PackageId>
+    </None>
+    <None Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Features\GWCustomActionCAFeature\GWCustomActionCAFeature.Template.xml">
+      <DependentUpon>GWCustomActionCAFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\GWDocLibFeature\GWDocLibFeature.Template.xml">
+      <DependentUpon>GWDocLibFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\GWFileHandlerFeature\GWFileHandlerFeature.Template.xml">
+      <DependentUpon>GWFileHandlerFeature.feature</DependentUpon>
+    </Content>
+    <Content Include="GWCustomActions\Elements.xml" />
+    <Content Include="GWDocLibEventReceiver\Elements.xml" />
+    <Content Include="Images\Glasswall.FileHandler\GWLogo48.png" />
+    <Content Include="Layouts\Glasswall.FileHandler\GWKey.txt" />
+    <Content Include="ADMIN\Glasswall.FileHandler\GWSettings.aspx" />
+    <Content Include="Newtonsoft.Json.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" Condition="'$(VSToolsPath)' != ''" />
+</Project>
