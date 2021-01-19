@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center py-3">
+    <h5>Welcome, @ViewData["UserName"]</h5>
+</div>
+
+
+<div class="row">
+    <div class="offset-lg-3 col-lg-6">
+        <div class="card bg-white">
+            <h6 class="px-5 py-3">FileHandler Test Form:</h6>
+            <form method="post" action="@ViewData["FileHandlerUrl"]" target="_blank" class="px-5 py-3">
+                <div class="form-group">
+                    <label for="cultureName">Culture Name:</label>
+                    <input type="text" class="form-control" id="cultureName" name="cultureName" placeholder="culture name" value="en-us">
+                </div>
+                <div class="form-group">
+                    <label for="client">Client:</label>
+                    <input type="text" class="form-control" id="client" name="client" placeholder="SharePoint or OneDrive" value="OneDrive">
+                </div>
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <input type="text" class="form-control" id="userId" name="userId" placeholder="you@yourcompany.com" value="@ViewData["UserEmail"]">
+                </div>
+                <div class="form-group">
+                    <label for="domainHint">Domain Hint:</label>
+                    <input type="text" class="form-control" id="domainHint" name="domainHint" placeholder="organizations or consumers" value="organizations">
+                </div>
+                <div class="form-group">
+                    <label for="items">Items:</label>
+                    <input type="text" class="form-control" id="items" name="items" placeholder="array of items">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div> 

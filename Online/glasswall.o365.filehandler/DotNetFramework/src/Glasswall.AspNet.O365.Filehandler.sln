@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30709.64
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glasswall.AspNet.O365.Filehandler", "Glasswall.AspNet.O365.Filehandler\Glasswall.AspNet.O365.Filehandler.csproj", "{79BBB307-673E-47DF-8E4B-00AA971CA65A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glasswall.AspNet.O365.Filehandler", "Filehandler\Glasswall.AspNet.O365.Filehandler.csproj", "{79BBB307-673E-47DF-8E4B-00AA971CA65A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

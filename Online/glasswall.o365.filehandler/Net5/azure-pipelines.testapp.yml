@@ -1,0 +1,69 @@
+name: FileHandlerTestApp_CI_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - samples/Glasswall.O365.FileHandler.App.Test
+      - azure-pipelines.testapp.yml
+      - build.testapp.ps1
+    exclude:
+      - '*'
+variables:
+  - name: artifactname
+    value: $(Build.BuildNumber)
+  - name: azureSubscription
+    value: GWAzureConnection
+  - name: webAppName
+    value: app-gwfhnet5test-dev    
+stages:
+  - stage: "CI"
+    displayName: "BUILD"
+    jobs:
+    - job: "BuildPublishArtifacts"
+      displayName: "FileHandler Build & Publish"
+      steps:
+      - pwsh: .\build.testapp.ps1
+        displayName: "Build & Publish FileHandler"
+
+      - task: ArchiveFiles@2
+        displayName: "Archive Artifacts"
+        inputs:
+          rootFolderOrFile: ./samples-artifacts
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: '$(Build.ArtifactStagingDirectory)/$(artifactname).zip' 
+
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+      
+  - stage: "CDPROD"
+    displayName: "PROD RELEASE"          
+    jobs:
+      - job: "DeployArtifacts"
+        displayName: "FileHandler Deploy"
+        steps:
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            itemPattern: '**/*.zip'
+            downloadPath: '$(System.ArtifactsDirectory)'
+        
+        - task: AzureWebApp@1
+          inputs:
+            azureSubscription: $(azureSubscription)
+            appType: 'webApp'
+            appName: $(webAppName)
+            package: $(System.ArtifactsDirectory)/drop/*.zip
+            appSettings: > 
+              -AzureAd:Domain $(AuthDomain) 
+              -AzureAd:TenantId $(TenantId) 
+              -AzureAd:ClientId $(ClientId) 
+              -AzureAd:ClientSecret $(ClientSecret) 
+              -Glasswall:FileHandlerUrl $(GWFileHandlerUrl)
