@@ -37,6 +37,14 @@ jobs:
     - name: Build & Publish
       run: ./build
       shell: pwsh
+    
+    - name: PWD
+      run: pwd 
+      shell: pwsh
+      
+    - name: DIR
+      run: dir 
+      shell: pwsh
 
     - uses: actions/upload-artifact@v2
       with:
