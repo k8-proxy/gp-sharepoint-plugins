@@ -1,0 +1,11 @@
+[
+    {
+        "id": "<Enter New GUID here>",
+        "type": "FileHandler",
+        "properties": [
+            { "key": "version","value": "2"},
+            { "key": "appIcon", "value": "{\"svg\":\"<Enter application icon here>\" }"},
+            { "key": "actions", "value": "[{\"type\":\"custom\",\"url\":\"https://localhost:44382/filehandler/download\",\"displayName\": \"Download (Glasswall)\",\"shortDisplayName\": \"Download (Glasswall)\", \"availableOn\":{\"file\":{\"extensions\":[\"*\"]}}}]"}
+        ]
+    }
+]
