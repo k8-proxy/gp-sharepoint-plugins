@@ -4,17 +4,10 @@ on:
   push:
     paths: 
       - "Online/glasswall.o365.filehandler/Net5/**"
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
+    
   workflow_dispatch:
     paths: 
       - "Online/glasswall.o365.filehandler/Net5/**"
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.gitignore'
-      - '**/*.gitattributes'
 
 defaults:
   run:
