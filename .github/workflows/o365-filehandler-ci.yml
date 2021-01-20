@@ -1,0 +1,51 @@
+name: "O365 FileHandler CI"
+
+on:
+  push:
+    paths: 
+      - "Online/glasswall.o365.filehandler/Net5/**"
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  workflow_dispatch:
+    paths: 
+      - "Online/glasswall.o365.filehandler/Net5/**"
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+
+defaults:
+  run:
+    working-directory: "./Online/glasswall.o365.filehandler/Net5"
+
+jobs:
+  build:
+    if: github.event_name == 'push' && contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
+    name: Build 
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build & Publish
+      run: ./build
+      shell: pwsh
+
+    - uses: actions/upload-artifact@v2
+    with:
+      name: FileHandlerWebApp
+      path: ./artifacts
