@@ -50,3 +50,27 @@ jobs:
       with:
         name: FileHandlerWebApp
         path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts/
+
+  deploy:
+    if: contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false
+    name: "GW DEV DEPLOY"
+    environment: GW-DEV
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 'Login via Azure CLI'
+        uses: azure/login@1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: FileHandlerWebApp
+          path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts
+
+      - name: 'Webapp Deploy'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: app-gwfh-dev
+          package: '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts'
