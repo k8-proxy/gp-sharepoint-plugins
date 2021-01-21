@@ -49,4 +49,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: FileHandlerWebApp
-        path: ./artifacts/**
+        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts/
