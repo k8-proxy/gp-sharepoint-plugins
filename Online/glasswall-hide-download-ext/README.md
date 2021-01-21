@@ -69,8 +69,9 @@ This solution contains SPFx Extension of Application Customizer type. It execute
 - A login device code will be displayed along with a link to a web page where it needs to be entered.
 - Navigate to [https://microsoft.com/devicelogin](https://microsoft.com/devicelogin).
 - Enter the code into the input field and select Next. 
-- You will then be presented with either a login screen or accounts that you have already logged in to Microsoft 365 with. Login with or choose the account from the list.
+- You will then be presented with either a login screen or accounts that you have already logged in to Microsoft 365 with. Login with a global admin account.
 - You will now be prompted to consent PNP Microsoft365 Management Shell.
+- Tick the checkbox 'Consent on behalf of your organisation' if it is visible
 - Select Accept to consent and complete the sign-in process.
 - Click [here](https://pnp.github.io/cli-microsoft365/user-guide/connecting-office-365/) for more information.
 
