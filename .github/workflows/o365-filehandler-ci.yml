@@ -54,6 +54,7 @@ jobs:
   deploy:
     if: contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false
     name: "GW DEV DEPLOY"
+    runs-on: ubuntu-latest
     environment: GW-DEV
 
     steps:
