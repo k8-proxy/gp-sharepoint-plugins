@@ -52,6 +52,7 @@ jobs:
         path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts/
 
   deploy:
+    needs: build
     if: contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false
     name: "GW DEV DEPLOY"
     runs-on: ubuntu-latest
