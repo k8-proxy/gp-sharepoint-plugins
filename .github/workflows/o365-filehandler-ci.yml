@@ -20,7 +20,7 @@ defaults:
 
 jobs:
   build:
-    if: ${{ SKIP_CI == true }}
+    if: ${{ SKIP_CI }} == true 
     name: 'Build FileHandler' 
     runs-on: ubuntu-latest
     env:
@@ -50,7 +50,7 @@ jobs:
 
   deploy:
     needs: build
-    if: ${{ SKIP_CD == true || IS_MAIN == true}}
+    if: ${{ SKIP_CD }} == true || ${{ IS_MAIN }} == true
     name: "Deploy GW-DEV"
     runs-on: ubuntu-latest
     environment: GW-DEV
