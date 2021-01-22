@@ -18,6 +18,8 @@ using Glasswall.O365.FileHandler.App.Services;
 using Refit;
 using Glasswall.O365.FileHandler.App.Clients;
 using Glasswall.O365.FileHandler.App.Extensions;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Glasswall.O365.FileHandler
 {
@@ -48,6 +50,8 @@ namespace Glasswall.O365.FileHandler
 
                 options.Events.OnRedirectToIdentityProvider = async context =>
                 {
+                    var logger = context.HttpContext.RequestServices.GetService<ILogger<Startup>>();
+                    logger.LogInformation("Executing OnRedirectToIdentityProvider");
                     if (previous != null)
                     {
                         await previous(context);
@@ -55,6 +59,8 @@ namespace Glasswall.O365.FileHandler
                     FileHandlerActivationParameters fileHandlerActivation;
                     if (context.Request.IsFileHandlerActivationRequest(out fileHandlerActivation))
                     {
+                        logger.LogInformation("IsFileHandlerActivationRequest:true");
+                        logger.LogInformation("FileHandlerActivationParameters: {@ActivationParameters}",fileHandlerActivation);
                         context.ProtocolMessage.LoginHint = fileHandlerActivation.UserId;
                         context.ProtocolMessage.DomainHint = "organizations";
                         CookieStorage.Save(context.Request.Form, context.Response);
@@ -94,6 +100,8 @@ namespace Glasswall.O365.FileHandler
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 

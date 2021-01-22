@@ -10,6 +10,7 @@ using Glasswall.O365.FileHandler.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Microsoft.Identity.Web;
 
@@ -18,11 +19,13 @@ namespace Glasswall.O365.FileHandler.Controllers
     [Authorize]
     public class FileHandlerController : Controller
     {
+        private readonly ILogger<FileHandlerController> _logger;
         private readonly GraphServiceClient _graphServiceClient;
         private readonly IFileRebuilder _fileRebuilder;
 
-        public FileHandlerController(GraphServiceClient graphServiceClient, IFileRebuilder fileRebuilder)
+        public FileHandlerController(ILogger<FileHandlerController> logger, GraphServiceClient graphServiceClient, IFileRebuilder fileRebuilder)
         {
+            _logger = logger;
             _graphServiceClient = graphServiceClient;
             _fileRebuilder = fileRebuilder;
         }
@@ -30,16 +33,23 @@ namespace Glasswall.O365.FileHandler.Controllers
         [AuthorizeForScopes(ScopeKeySection = "DownstreamApi:Scopes")]
         public async Task<FileStreamResult> Download()
         {
+            _logger.LogInformation("Executing Download");
+            _logger.LogInformation("Retrieving activation parameters");
             var parameters = GetActivationParameters(Request);
 
             var fileUri = new Uri(parameters.ItemUrls.First());
+            _logger.LogInformation("File Uri: {@FileUri}",fileUri);
+            _logger.LogInformation("Building file content request");
             var itemRequestBuilder = GetItemRequestBuilder(fileUri);
+            _logger.LogInformation("Getting file metadata");
             var sourceItem = await itemRequestBuilder.Request().GetAsync();
+            _logger.LogInformation("Getting file content");
             var contentStream = await itemRequestBuilder.Content.Request().GetAsync();
+            _logger.LogInformation("Converting to base64 string");
             var base64String = ConvertStreamToBytes(contentStream);
-
+            _logger.LogInformation("Rebuilding file");
             byte[] regeneratedFileBytes = await _fileRebuilder.Rebuild(base64String);
-
+            _logger.LogInformation("Sending rebuilt file to client");
             return new FileStreamResult(new MemoryStream(regeneratedFileBytes), sourceItem.File.MimeType)
             {
                 FileDownloadName = sourceItem.Name

@@ -30,19 +30,19 @@
         <div class="col-md-4">
             <h2>Signed In</h2>
             <p>Welcome @Model.DisplayName. To try out Glasswall Filehandler, hop over to <a href="@Model.OneDriveUrl">your OneDrive and try it out!</a></p>
-            <p><a class="btn btn-default" href="@Model.OneDriveUrl">Try it in OneDrive &raquo;</a></p>
+            <p><a class="btn btn-primary" href="@Model.OneDriveUrl">Try it in OneDrive &raquo;</a></p>
         </div>
     }
     else
     {
         <div class="col-md-4">
             <h2>User Sign-In</h2>
-            <p>@Html.ActionLink("Sign in as a user", "SignIn", "Account") to enable the file handler extension on your account.</p>
+            <p><a asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in as a user</a> to enable the file handler extension on your account.</p>
       </div>
     }
 
     <div class="col-md-4">
         <h2>Admin Sign-In</h2>
-        <p>@Html.ActionLink("Sign in as an admin", "SignInAdmin", "Account") to enable the file handler extension for your entire organization.</p>
+        <p><a asp-controller="Home" asp-action="SignInAdmin">Sign in as an admin</a> to enable the file handler extension for your entire organization.</p>
     </div>
 </div>
