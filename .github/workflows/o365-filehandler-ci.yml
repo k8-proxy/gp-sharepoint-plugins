@@ -48,7 +48,7 @@ jobs:
   deploy:
     needs: build           
     name: "Deploy GW-DEV"
-    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false || github.ref == 'refs/heads/main'      
+    if: (contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false) || github.ref == 'refs/heads/main'      
     runs-on: ubuntu-latest
     environment: GW-DEV
 
