@@ -9,14 +9,19 @@ on:
     paths: 
       - "Online/glasswall.o365.filehandler/Net5/**"
 
+env:
+  SKIP_CI: ${{ contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false }}
+  SKIP_CD: ${{ contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false  }}
+  IS_MAIN: ${{ github.ref == 'refs/heads/main' }} 
+
 defaults:
   run:
     working-directory: "./Online/glasswall.o365.filehandler/Net5"
 
 jobs:
   build:
-    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
-    name: Build 
+    if: ${{ SKIP_CI == true }}
+    name: 'Build FileHandler' 
     runs-on: ubuntu-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -38,14 +43,6 @@ jobs:
       run: ./build
       shell: pwsh
     
-    - name: PWD
-      run: pwd 
-      shell: pwsh
-      
-    - name: DIR
-      run: dir 
-      shell: pwsh
-
     - uses: actions/upload-artifact@v2
       with:
         name: FileHandlerWebApp
@@ -53,8 +50,8 @@ jobs:
 
   deploy:
     needs: build
-    if: contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false
-    name: "GW DEV DEPLOY"
+    if: ${{ SKIP_CD == true || IS_MAIN == true}}
+    name: "Deploy GW-DEV"
     runs-on: ubuntu-latest
     environment: GW-DEV
 
@@ -66,7 +63,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - uses: actions/download-artifact@v2
+      - name: 'Download artifacts'
+        uses: actions/download-artifact@v2
         with:
           name: FileHandlerWebApp
           path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts
