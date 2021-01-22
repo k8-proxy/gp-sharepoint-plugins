@@ -10,8 +10,8 @@ on:
       - "Online/glasswall.o365.filehandler/Net5/**"
 
 env:
-  SKIP_CI: ${{ contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false }}
-  SKIP_CD: ${{ contains(toJson(github.event.commits), '***NO_CD***') == false && contains(toJson(github.event.commits), '[cd skip]') == false && contains(toJson(github.event.commits), '[skip cd]') == false  }}
+  SKIP_CI: ${{ contains(toJson(github.event.commits), '***NO_CI***') == true && contains(toJson(github.event.commits), '[ci skip]') == true && contains(toJson(github.event.commits), '[skip ci]') == true }}
+  SKIP_CD: ${{ contains(toJson(github.event.commits), '***NO_CD***') == true && contains(toJson(github.event.commits), '[cd skip]') == true && contains(toJson(github.event.commits), '[skip cd]') == true }}
   IS_MAIN: ${{ github.ref == 'refs/heads/main' }} 
 
 defaults:
@@ -20,7 +20,7 @@ defaults:
 
 jobs:
   build:
-    if: $SKIP_CI == true 
+    if: $env.SKIP_CI == false 
     name: 'Build FileHandler' 
     runs-on: ubuntu-latest
     env:
@@ -50,7 +50,7 @@ jobs:
 
   deploy:
     needs: build
-    if: $SKIP_CD == true || $IS_MAIN == true
+    if: $env.SKIP_CD == false || $env.IS_MAIN == true
     name: "Deploy GW-DEV"
     runs-on: ubuntu-latest
     environment: GW-DEV
