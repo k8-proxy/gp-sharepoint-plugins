@@ -43,10 +43,11 @@ jobs:
         gulp bundle --ship
         gulp package-solution --ship    
 
-    - uses: actions/upload-artifact@v2
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
       with:
         name: HideDownloadExtension
-        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/
+        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
 
   deploy:
     needs: build
@@ -60,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: HideDownloadExtension
-          path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/
+          path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
 
       - name: Microsoft 365 Login
         uses: pnp/action-cli-login@v2.0.0
@@ -71,7 +72,7 @@ jobs:
       - name: Deploy Extension
         uses: pnp/action-cli-deploy@v2.0.0
         with:
-          APP_FILE_PATH: '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}'
+          APP_FILE_PATH: '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}'
         # SITE_COLLECTION_URL: https://${{ secrets.tenant}}.sharepoint.com/${{secrets.catalogsite}}
           SKIP_FEATURE_DEPLOYMENT: true
           OVERWRITE: true
