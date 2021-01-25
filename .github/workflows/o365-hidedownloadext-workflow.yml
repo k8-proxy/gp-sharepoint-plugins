@@ -1,0 +1,77 @@
+name: 'O365 HideDownloadExtension Workflow'
+
+on:
+  push:
+    paths: 
+      - 'Online/glasswall-hide-download-ext/**'
+
+  workflow_dispatch:
+    paths: 
+      - 'Online/glasswall-hide-download-ext/**'
+
+env:
+  SPPKG_FILE_NAME: 'glasswall-hide-download-ext.sppkg'
+
+defaults:
+  run:
+    working-directory: './Online/glasswall-hide-download-ext'
+
+jobs:
+  build:
+    name: 'Build Extension'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+      
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: 10.x
+    
+    - name: Run npm ci
+      run: npm ci
+    
+    - name: Run npm i -g gulp
+      run: npm i -g gulp
+      if: runner.os == 'macOS'
+    
+    - name: Bundle and package
+      run: |
+        gulp clean
+        gulp bundle --ship
+        gulp package-solution --ship    
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: HideDownloadExtension
+        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/
+
+  deploy:
+    needs: build
+    name: 'Deploy GW-DEV'      
+    if: contains('/main', github.ref)
+    runs-on: ubuntu-latest
+    environment: GW-DEV
+
+    steps:
+      - name: 'Download artifacts'
+        uses: actions/download-artifact@v2
+        with:
+          name: HideDownloadExtension
+          path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/
+
+      - name: Microsoft 365 Login
+        uses: pnp/action-cli-login@v2.0.0
+        with:
+          ADMIN_USERNAME:  ${{secrets.username}}
+          ADMIN_PASSWORD:  ${{secrets.password}}
+    
+      - name: Deploy Extension
+        uses: pnp/action-cli-deploy@v2.0.0
+        with:
+          APP_FILE_PATH: '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/glasswall-hide-download-ext/sharepoint/solution/${{env.SPPKG_FILE_NAME}}'
+        # SITE_COLLECTION_URL: https://${{ secrets.tenant}}.sharepoint.com/${{secrets.catalogsite}}
+          SKIP_FEATURE_DEPLOYMENT: true
+          OVERWRITE: true
