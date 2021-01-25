@@ -1,18 +1,18 @@
-name: "O365 FileHandler CI"
+name: 'O365 FileHandler CI'
 
 on:
   push:
     paths: 
-      - "Online/glasswall.o365.filehandler/Net5/**"
+      - 'Online/glasswall.o365.filehandler/Net5/**'
     
   workflow_dispatch:
     paths: 
-      - "Online/glasswall.o365.filehandler/Net5/**"
+      - 'Online/glasswall.o365.filehandler/Net5/**'
 
 
 defaults:
   run:
-    working-directory: "./Online/glasswall.o365.filehandler/Net5"
+    working-directory: './Online/glasswall.o365.filehandler/Net5'
 
 jobs:
   build:
@@ -47,7 +47,7 @@ jobs:
 
   deploy:
     needs: build           
-    name: "Deploy GW-DEV"
+    name: 'Deploy GW-DEV'
     if: contains('/main', github.ref)
     runs-on: ubuntu-latest
     environment: GW-DEV
