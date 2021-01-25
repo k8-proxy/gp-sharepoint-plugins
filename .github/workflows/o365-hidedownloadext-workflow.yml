@@ -52,7 +52,7 @@ jobs:
   deploy:
     needs: build
     name: 'Deploy GW-DEV'      
-    if: contains('/main', github.ref)
+    if: contains(github.ref, '/main')
     runs-on: ubuntu-latest
     environment: GW-DEV
 
