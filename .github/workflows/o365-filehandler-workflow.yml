@@ -1,4 +1,4 @@
-name: 'O365 FileHandler CI'
+name: 'O365 FileHandler Workflow'
 
 on:
   push:
