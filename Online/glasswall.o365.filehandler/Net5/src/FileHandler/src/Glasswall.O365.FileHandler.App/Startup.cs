@@ -9,14 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Glasswall.O365.FileHandler.Models;
-using Glasswall.O365.FileHandler.Controllers;
 using Glasswall.O365.FileHandler.Utils;
-using System;
-using Glasswall.O365.FileHandler.App.Models;
-using Microsoft.Graph;
-using Glasswall.O365.FileHandler.App.Services;
-using Refit;
-using Glasswall.O365.FileHandler.App.Clients;
 using Glasswall.O365.FileHandler.App.Extensions;
 using Serilog;
 using Microsoft.Extensions.Logging;
@@ -34,7 +27,30 @@ namespace Glasswall.O365.FileHandler
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            ConfigureAppInsightsServices(services);
+
+            ConfigureAuthenticationServices(services);
+
+            services.ConfigureGlasswallServices(Configuration.GetSection("Glasswall"));
+
+            ConfigureMvcServices(services);
+        }
+
+        private void ConfigureMvcServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.AddRazorPages()
+                 .AddMicrosoftIdentityUI();
+        }
+
+        private void ConfigureAuthenticationServices(IServiceCollection services)
+        {
             var initialScopes = Configuration.GetValue<string>("DownstreamApi:Scopes")?.Split(' ');
 
             services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -60,7 +76,7 @@ namespace Glasswall.O365.FileHandler
                     if (context.Request.IsFileHandlerActivationRequest(out fileHandlerActivation))
                     {
                         logger.LogInformation("IsFileHandlerActivationRequest:true");
-                        logger.LogInformation("FileHandlerActivationParameters: {@ActivationParameters}",fileHandlerActivation);
+                        logger.LogInformation("FileHandlerActivationParameters: {@ActivationParameters}", fileHandlerActivation);
                         context.ProtocolMessage.LoginHint = fileHandlerActivation.UserId;
                         context.ProtocolMessage.DomainHint = "organizations";
                         CookieStorage.Save(context.Request.Form, context.Response);
@@ -73,18 +89,14 @@ namespace Glasswall.O365.FileHandler
                     }
                 };
             });
+        }
 
-            services.AddGlasswall(Configuration.GetSection("Glasswall"));
-
-            services.AddControllersWithViews(options =>
+        private void ConfigureAppInsightsServices(IServiceCollection services)
+        {
+            if (!string.IsNullOrEmpty(Configuration.GetValue<string>("APPINSIGHTS_INSTRUMENTATIONKEY")))
             {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
-            services.AddRazorPages()
-                 .AddMicrosoftIdentityUI();
+                services.AddApplicationInsightsTelemetry();
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

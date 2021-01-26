@@ -10,7 +10,7 @@ namespace Glasswall.O365.FileHandler.App.Extensions
 {
     public static class DependencyInjection
     {
-        public static void AddGlasswall(this IServiceCollection services, IConfigurationSection glasswallSection)
+        public static void ConfigureGlasswallServices(this IServiceCollection services, IConfigurationSection glasswallSection)
         {
             var glasswallSettings = new GlasswallSettings();
             glasswallSection.Bind(glasswallSettings);
