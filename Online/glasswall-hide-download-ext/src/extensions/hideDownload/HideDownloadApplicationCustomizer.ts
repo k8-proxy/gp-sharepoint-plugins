@@ -29,6 +29,11 @@ export default class HideDownloadApplicationCustomizer
 	private _Observer: any;
 	private _MutationConfig: any;
 
+	private _isCommandbarObserverAttached = false;
+	private _isItemListObserverAttached = false;
+	private _isCommandbarEventAttached = false;
+	private _isItemListEventAttached = false;
+
 	constructor() {
 		super();
 
@@ -42,21 +47,22 @@ export default class HideDownloadApplicationCustomizer
 	@override
 	public onInit(): Promise<void> {
 		Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
+		console.log(`Initialized ${strings.Title}`);
 
-		// To hide Download button in Top Commandbar
-		this.tryAssociateObserverOnCommandBar();
-		// For fail safe - If Mutation observer doesn't work, let's attach change event to Commandbar
-		this.tryAttachOnChangeEventToCommandBar();
+		this.associateObserverAndEvents();
 
-		// To hide Download button in Context Menu
-		this.tryAssociateObserverOnItemList();
-		// For fail safe - If Mutation observer doesn't work, let's attach change event to Context Menu
-		this.tryAttachOnChangeEventToItemList();
+		// Associate observers and events on page navigations as well.
+		this.context.application.navigatedEvent.add(this, () => {
+			console.log('Navigated Event:', window.location.href);
+			setTimeout(() => {
+				this.associateObserverAndEvents();				
+			}, 100);
+		});
 
 		return Promise.resolve();
 	}
 
-	protected componentWillUnmount() {
+	public componentWillUnmount() {
 		// Disconnect mutation observer
 		this._Observer.disconnect();
 	}
@@ -66,12 +72,26 @@ export default class HideDownloadApplicationCustomizer
 		this.TryHideDownloadButtons();
 	}
 
+	private associateObserverAndEvents() {
+
+		// To hide Download button in Top Commandbar
+		this.tryAssociateObserverOnCommandBar();
+		// For fail safe - If Mutation observer doesn't work, let's attach change event to Commandbar
+		this.tryAttachOnChangeEventToCommandBar();
+
+		// To hide Download button in Context Menu
+		this.tryAssociateObserverOnItemList();
+		// For fail safe - If Mutation observer doesn't work, let's attach change event to Context Menu
+		this.tryAttachOnChangeEventToItemList();		
+	}
+
 	private tryAssociateObserverOnCommandBar(retryCount: number = 1) {
 		let commandBarItems = document.getElementsByClassName(this._CommandBarClientId);
 		if (commandBarItems.length > 0) {
 			this.associateObserverOnCommandBar(commandBarItems[0]);
-		} else if (retryCount < 3) {
+		} else if (!this._isCommandbarObserverAttached && retryCount < 10) {
 			//retry after 100ms to check if the element is loaded
+			console.log("Commandbar Observer retryCount: " + retryCount);
 			setTimeout(() => {
 				this.tryAssociateObserverOnCommandBar(++retryCount);
 			}, 100);
@@ -85,6 +105,8 @@ export default class HideDownloadApplicationCustomizer
 			try {
 				this._Observer.observe(commandBar, this._MutationConfig);
 				commandBar.setAttribute(ATTR_GW_COMMANDBAR_OBSERVER, "true");
+				this._isCommandbarObserverAttached = true;
+				console.log("Commandbar Observer attached successfully.");
 			} catch (error) {
 				console.log("An error occurred while associating observer for Command Bar. Message: " + error.message);
 			}
@@ -95,8 +117,9 @@ export default class HideDownloadApplicationCustomizer
 		let listItems = document.getElementsByClassName(this._ItemListClientId);
 		if (listItems.length > 0) {
 			this.associateObserverOnItemList(listItems[0]);
-		} else if (retryCount < 3) {
+		} else if (!this._isItemListObserverAttached && retryCount < 10) {
 			//retry after 100ms to check if the element is loaded
+			console.log("ItemList Observer retryCount: " + retryCount);
 			setTimeout(() => {
 				this.tryAssociateObserverOnItemList(++retryCount);
 			}, 100);
@@ -110,6 +133,8 @@ export default class HideDownloadApplicationCustomizer
 			try {
 				this._Observer.observe(itemList, this._MutationConfig);
 				itemList.setAttribute(ATTR_GW_ITEMLIST_OBSERVER, "true");
+				this._isItemListObserverAttached = true;
+				console.log("ItemList Observer attached successfully.");
 			} catch (error) {
 				console.log("An error occurred while associating observer for Item List. Message: " + error.message);
 			}
@@ -120,8 +145,9 @@ export default class HideDownloadApplicationCustomizer
 		let commandBarItems = document.getElementsByClassName(this._CommandBarClientId);
 		if (commandBarItems.length > 0) {
 			this.attachOnChangeEventToCommandBar(commandBarItems[0]);
-		} else if (retryCount < 3) {
+		} else if (!this._isCommandbarEventAttached && retryCount < 10) {
 			//retry after 100ms to check if the element is loaded
+			console.log("Commandbar Event retryCount: " + retryCount);
 			setTimeout(() => {
 				this.tryAttachOnChangeEventToCommandBar(++retryCount);
 			}, 100);
@@ -135,6 +161,8 @@ export default class HideDownloadApplicationCustomizer
 			try {
 				commandBar.addEventListener("DOMNodeInserted", this.onTopCommandBarChanged.bind(this));
 				commandBar.setAttribute(ATTR_GW_COMMANDBAR_EVENT, "true");
+				this._isCommandbarEventAttached = true;
+				console.log("Commandbar Event attached successfully.");
 			} catch(error) {
 				console.log("An error occurred while associating event for Command Bar. Message: " + error.message);
 			}
@@ -145,8 +173,9 @@ export default class HideDownloadApplicationCustomizer
 		let listItems = document.getElementsByClassName(this._ItemListClientId);
 		if (listItems.length > 0) {
 			this.attachOnChangeEventToItemList(listItems[0]);
-		} else if (retryCount < 3) {
+		} else if (!this._isItemListEventAttached && retryCount < 10) {
 			//retry after 100ms to check if the element is loaded
+			console.log("ItemList Event retryCount: " + retryCount);
 			setTimeout(() => {
 				this.tryAttachOnChangeEventToItemList(++retryCount);
 			}, 100);
@@ -160,6 +189,8 @@ export default class HideDownloadApplicationCustomizer
 			try {
 				itemList.addEventListener("DOMNodeInserted", this.onItemContentListChanged.bind(this));
 				itemList.setAttribute(ATTR_GW_ITEMLIST_EVENT, "true");
+				this._isItemListEventAttached = true;
+				console.log("ItemList Event attached successfully.");
 			} catch(error) {
 				console.log("An error occurred while associating event for Item List. Message: " + error.message);
 			}
