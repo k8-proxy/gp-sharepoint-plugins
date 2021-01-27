@@ -45,17 +45,13 @@ export default class HideDownloadApplicationCustomizer
 
 		// To hide Download button in Top Commandbar
 		this.tryAssociateObserverOnCommandBar();
-		// For fail safe - If Mutation observer doesn't work
+		// For fail safe - If Mutation observer doesn't work, let's attach change event to Commandbar
 		this.tryAttachOnChangeEventToCommandBar();
 
 		// To hide Download button in Context Menu
 		this.tryAssociateObserverOnItemList();
+		// For fail safe - If Mutation observer doesn't work, let's attach change event to Context Menu
 		this.tryAttachOnChangeEventToItemList();
-
-		// Additionally, if the download buttons are not hidden with event listners, we can hide them manually and retry every 500 ms.
-		// setInterval(() => {
-		// 	this.hideDownloadButtons(true);
-		// }, 500);
 
 		return Promise.resolve();
 	}
@@ -85,7 +81,7 @@ export default class HideDownloadApplicationCustomizer
 	private associateObserverOnCommandBar(commandBar: any) {
 		const ATTR_GW_COMMANDBAR_OBSERVER: string = "xn_gw_cb_observer";
 
-		if (commandBar.getAttribute(ATTR_GW_COMMANDBAR_OBSERVER) !== "true") {
+		if (commandBar && commandBar.getAttribute(ATTR_GW_COMMANDBAR_OBSERVER) !== "true") {
 			try {
 				this._Observer.observe(commandBar, this._MutationConfig);
 				commandBar.setAttribute(ATTR_GW_COMMANDBAR_OBSERVER, "true");
@@ -110,7 +106,7 @@ export default class HideDownloadApplicationCustomizer
 	private associateObserverOnItemList(itemList: any) {
 		const ATTR_GW_ITEMLIST_OBSERVER: string = "xn_gw_itemlist_observer";
 
-		if (itemList.getAttribute(ATTR_GW_ITEMLIST_OBSERVER) !== "true") {
+		if (itemList && itemList.getAttribute(ATTR_GW_ITEMLIST_OBSERVER) !== "true") {
 			try {
 				this._Observer.observe(itemList, this._MutationConfig);
 				itemList.setAttribute(ATTR_GW_ITEMLIST_OBSERVER, "true");
@@ -123,42 +119,50 @@ export default class HideDownloadApplicationCustomizer
 	private tryAttachOnChangeEventToCommandBar(retryCount: number = 1) {
 		let commandBarItems = document.getElementsByClassName(this._CommandBarClientId);
 		if (commandBarItems.length > 0) {
-			this.attachOnChangeEventToCommandBar(commandBarItems[0], retryCount);
+			this.attachOnChangeEventToCommandBar(commandBarItems[0]);
 		} else if (retryCount < 3) {
 			//retry after 100ms to check if the element is loaded
 			setTimeout(() => {
-				this.attachOnChangeEventToCommandBar(++retryCount);
+				this.tryAttachOnChangeEventToCommandBar(++retryCount);
 			}, 100);
 		}
 	}
 
-	private attachOnChangeEventToCommandBar(commandBar: any, retryCount: number = 1) {
+	private attachOnChangeEventToCommandBar(commandBar: any) {
 		const ATTR_GW_COMMANDBAR_EVENT: string = "xn_gw_cb_evt";
 
-		if (commandBar.getAttribute(ATTR_GW_COMMANDBAR_EVENT) !== "true") {
-			commandBar.addEventListener("DOMNodeInserted", this.onTopCommandBarChanged.bind(this));
-			commandBar.setAttribute(ATTR_GW_COMMANDBAR_EVENT, "true");
+		if (commandBar && commandBar.getAttribute(ATTR_GW_COMMANDBAR_EVENT) !== "true") {
+			try {
+				commandBar.addEventListener("DOMNodeInserted", this.onTopCommandBarChanged.bind(this));
+				commandBar.setAttribute(ATTR_GW_COMMANDBAR_EVENT, "true");
+			} catch(error) {
+				console.log("An error occurred while associating event for Command Bar. Message: " + error.message);
+			}
 		}
 	}
 
 	private tryAttachOnChangeEventToItemList(retryCount: number = 1) {
 		let listItems = document.getElementsByClassName(this._ItemListClientId);
 		if (listItems.length > 0) {
-			this.attachOnChangeEventToItemList(listItems[0], retryCount);
+			this.attachOnChangeEventToItemList(listItems[0]);
 		} else if (retryCount < 3) {
 			//retry after 100ms to check if the element is loaded
 			setTimeout(() => {
-				this.attachOnChangeEventToItemList(++retryCount);
+				this.tryAttachOnChangeEventToItemList(++retryCount);
 			}, 100);
 		}
 	}
 
-	private attachOnChangeEventToItemList(itemList: any, retryCount: number = 1) {
+	private attachOnChangeEventToItemList(itemList: any) {
 		const ATTR_GW_ITEMLIST_EVENT: string = "xn_gw_itemlist_evt";
 
-		if (itemList.getAttribute(ATTR_GW_ITEMLIST_EVENT) !== "true") {
-			itemList.addEventListener("DOMNodeInserted", this.onItemContentListChanged.bind(this));
-			itemList.setAttribute(ATTR_GW_ITEMLIST_EVENT, "true");
+		if (itemList && itemList.getAttribute(ATTR_GW_ITEMLIST_EVENT) !== "true") {
+			try {
+				itemList.addEventListener("DOMNodeInserted", this.onItemContentListChanged.bind(this));
+				itemList.setAttribute(ATTR_GW_ITEMLIST_EVENT, "true");
+			} catch(error) {
+				console.log("An error occurred while associating event for Item List. Message: " + error.message);
+			}
 		}
 	}
 
