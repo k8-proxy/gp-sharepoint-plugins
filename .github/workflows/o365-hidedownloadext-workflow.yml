@@ -69,6 +69,9 @@ jobs:
           ADMIN_USERNAME:  ${{secrets.username}}
           ADMIN_PASSWORD:  ${{secrets.password}}
     
+      - name: Upgrade CLI for Microsoft365 with preview version
+        run: npm i -g @pnp/cli-microsoft365@next
+        
       - name: Deploy Extension
         uses: pnp/action-cli-deploy@v2.0.0
         with:
