@@ -37,5 +37,6 @@ jobs:
     - name: Build and Publish Web App
       run: msbuild Glasswall.FileHandler.sln /p:Configuration=Release
 
-    - script: dir Glasswall.FileHandler/bin/Release     
+    - name: List bin/release folder
+      run: dir Glasswall.FileHandler/bin/Release     
     
