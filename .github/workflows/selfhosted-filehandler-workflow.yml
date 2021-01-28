@@ -1,0 +1,42 @@
+name: 'SelfHosted FileHandler Workflow'
+
+on:
+  push:
+    paths: 
+      - 'SelfHosted/src/Glasswall.FileHandler/**'
+    
+  workflow_dispatch:
+    paths: 
+      - 'SelfHosted/src/Glasswall.FileHandler/**'
+
+
+defaults:
+  run:
+    working-directory: './SelfHosted/src/Glasswall.FileHandler'
+
+jobs:
+  build:
+    name: 'Build FileHandler' 
+    runs-on: windows-latest
+    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false 
+      
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild Path
+      uses: warrenbuckley/Setup-MSBuild@v1
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+      with:
+        nuget-version: 5.x
+     
+    - name: Restore NuGet Packages
+      run: nuget restore Glasswall.FileHandler.sln
+ 
+    - name: Build and Publish Web App
+      run: msbuild Glasswall.FileHandler.sln /p:Configuration=Release
+
+    - name: List bin/release folder
+      run: dir Glasswall.FileHandler/bin/Release     
+    
