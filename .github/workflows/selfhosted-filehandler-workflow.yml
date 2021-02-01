@@ -17,7 +17,7 @@ defaults:
 jobs:
   build:
     name: 'Build FileHandler' 
-    runs-on: windows-latest
+    runs-on: self-hosted
     if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false 
       
     steps:
