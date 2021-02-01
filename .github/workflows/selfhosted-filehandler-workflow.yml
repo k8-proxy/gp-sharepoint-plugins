@@ -20,10 +20,6 @@ jobs:
     runs-on: self-hosted
     if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false 
     
-    variables:
-      - name: artifactsDir
-        value: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
-
     steps:
     - uses: actions/checkout@v2
     
@@ -42,9 +38,9 @@ jobs:
       run: msbuild Glasswall.FileHandler.sln /p:Configuration=Release 
 
     - name: Package SP Solution
-      run: msbuild Glasswall.FileHandler.sln /t:Package /p:Configuration=Release /p:OutputPath=$(artifactsDir)
+      run: msbuild Glasswall.FileHandler.sln /t:Package /p:Configuration=Release /p:OutputPath=/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
 
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: $(artifactsDir)/*.wsp
+        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts/*.wsp
