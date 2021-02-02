@@ -15,8 +15,9 @@ defaults:
     working-directory: './SelfHosted'
 
 env:
-  SolutionFile: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
-  ArtifactsDir: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
+  SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  ARTIFACTS_DIR: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
+
 jobs:
   build:
     name: 'Build FileHandler' 
@@ -35,15 +36,15 @@ jobs:
         nuget-version: 5.x
      
     - name: Restore NuGet Packages
-      run: nuget restore ${env.SolutionFile}
+      run: nuget restore $SOLUTION_FILE
  
     - name: Build SP Solution
-      run: msbuild ${env.SolutionFile} /p:Configuration=Release 
+      run: msbuild $SOLUTION_FILE /p:Configuration=Release 
 
     - name: Package SP Solution
-      run: msbuild ${env.SolutionFile} /t:Package /p:Configuration=Release /p:OutputPath=${env.ArtifactsDir}
+      run: msbuild $SOLUTION_FILE /t:Package /p:Configuration=Release /p:OutputPath=$ARTIFACTS_DIR
 
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${env.ArtifactsDir}/*.wsp
+        path: $ARTIFACTS_DIR/*.wsp
