@@ -17,12 +17,13 @@ defaults:
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
   ARTIFACTS_DIR: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
+  RUN_BUILD: ${{ contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false }}
 
 jobs:
   build:
     name: 'Build FileHandler' 
     runs-on: self-hosted
-    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false 
+    if: ${{ env.RUN_BUILD }}  
     
     steps:
     - uses: actions/checkout@v2
