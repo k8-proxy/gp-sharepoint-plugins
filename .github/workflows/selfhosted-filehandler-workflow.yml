@@ -16,7 +16,8 @@ defaults:
 
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
-  ARTIFACTS_DIR: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
+  INSTALLER_FILE_FOLDER: ./installer
+  ARTIFACTS_DIR: ./src/Glasswall.FileHandler/artifacts
 
 jobs:
   build:
@@ -49,9 +50,10 @@ jobs:
         name: SelfHostedFileHandler
         path: |
           ${{ env.ARTIFACTS_DIR }}/*.wsp
-          ./installer/*.ps1
+          ${{ env.INSTALLER_FILE_FOLDER }}/*.ps1
 
   deploy:
+    needs: build
     name: 'Deploy FileHandler'
     runs-on: self-hosted
 
