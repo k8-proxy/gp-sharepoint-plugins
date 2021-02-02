@@ -23,7 +23,7 @@ jobs:
   build:
     name: 'Build FileHandler' 
     runs-on: self-hosted
-    if: ${{ env.RUN_BUILD }}  
+    if: env.RUN_BUILD  
     
     steps:
     - uses: actions/checkout@v2
