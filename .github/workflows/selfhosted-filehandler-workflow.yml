@@ -15,9 +15,10 @@ defaults:
     working-directory: './SelfHosted'
 
 env:
-  SOLUTION_FILE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/src/Glasswall.FileHandler/Glasswall.FileHandler.sln
-  INSTALLER_FOLDER: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/installer
-  ARTIFACTS_DIR: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/src/Glasswall.FileHandler/artifacts
+  SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  INSTALLER_FOLDER_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/installer
+  ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/src/Glasswall.FileHandler/artifacts
+  ARTIFACTS_DIR_RELATIVE: ./src/Glasswall.FileHandler/artifacts
 
 jobs:
   build:
@@ -43,17 +44,17 @@ jobs:
       run: msbuild ${{ env.SOLUTION_FILE }} /p:Configuration=Release 
 
     - name: Package SP Solution
-      run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR }}
+      run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ env.ARTIFACTS_DIR }}/*.wsp
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
 
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ env.INSTALLER_FOLDER }}/*.ps1
+        path: ${{ env.INSTALLER_FOLDER_ABSOLUTE }}/*.ps1
 
   deploy:
     needs: build
@@ -67,10 +68,10 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ env.ARTIFACTS_DIR }}
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
     - name: Add SP PS Cmdlets
-      run: powershell Add-PsSnapin Microsoft.SharePoint.PowerShell
+      run: Add-PsSnapin Microsoft.SharePoint.PowerShell
 
     - name: Deploy SP Solution Package
-      run: powershell InstallFileHandler.ps1
+      run: ${{ env.ARTIFACTS_DIR_RELATIVE }}/InstallFileHandler.ps1
