@@ -46,12 +46,14 @@ jobs:
     - name: Package SP Solution
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
-    - uses: actions/upload-artifact@v2
+    - name: Upload WSP
+      uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
         path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
 
-    - uses: actions/upload-artifact@v2
+    - name: Upload Installer Files
+      uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
         path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1
@@ -70,8 +72,7 @@ jobs:
         name: SelfHostedFileHandler
         path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
-    - name: Add SP PS Cmdlets
-      run: Add-PsSnapin Microsoft.SharePoint.PowerShell
-
     - name: Deploy SP Solution Package
-      run: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/InstallFileHandler.ps1
+      run: |
+        Add-PsSnapin Microsoft.SharePoint.PowerShell
+        ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/InstallFileHandler.ps1
