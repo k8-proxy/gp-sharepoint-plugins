@@ -74,4 +74,4 @@ jobs:
       run: Add-PsSnapin Microsoft.SharePoint.PowerShell
 
     - name: Deploy SP Solution Package
-      run: ${{ env.ARTIFACTS_DIR_RELATIVE }}/InstallFileHandler.ps1
+      run: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/InstallFileHandler.ps1
