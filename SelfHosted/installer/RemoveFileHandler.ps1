@@ -1,13 +1,4 @@
-﻿$solutionName = “FileHandlerv1.wsp”
-$featureName = "Custom File Handler Feature"
-$folder = Get-Location
-$webAppName=$args[0]
-
-<#
-if($webAppName -eq $null -or $webAppName -eq ''){
-    Write-Host "$(Get-Date)": "  Enter valid URL to deploy" -ForegroundColor Red
-    exit
-}#>
+﻿$solutionName = "Glasswall.FileHandler.wsp"
 
 Write-Host "Uninstalling solution from farm ..." -ForegroundColor Yellow
 Uninstall-SPSolution -identity $solutionName
@@ -19,3 +10,4 @@ Write-Host "Completed" -ForegroundColor Green
 
 Write-Host "Restarting iis ..." -ForegroundColor Yellow
 iisreset
+Write-Host "Completed" -ForegroundColor Green
