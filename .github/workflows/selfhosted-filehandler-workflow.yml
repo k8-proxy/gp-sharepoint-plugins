@@ -15,9 +15,10 @@ defaults:
     working-directory: './SelfHosted'
 
 env:
-  SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
-  INSTALLER_FILE_FOLDER: ./installer
-  ARTIFACTS_DIR: ./src/Glasswall.FileHandler/artifacts
+  BASE_FOLDER: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins
+  SOLUTION_FILE: ${{ env.BASE_FOLDER }}/src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  INSTALLER_FOLDER: ${{ env.BASE_FOLDER }}/installer
+  ARTIFACTS_DIR: ${{ env.BASE_FOLDER }}/src/Glasswall.FileHandler/artifacts
 
 jobs:
   build:
@@ -53,7 +54,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ env.INSTALLER_FILE_FOLDER }}/*.ps1
+        path: ${{ env.INSTALLER_FOLDER }}/*.ps1
 
   deploy:
     needs: build
