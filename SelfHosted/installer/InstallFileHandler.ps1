@@ -1,4 +1,4 @@
-$solutionName = “FileHandlerv1.wsp”
+$solutionName = "Glasswall.FileHandler.wsp"
 $featureName = "Custom File Handler Feature"
 $folder = Get-Location
 $webAppName=$args[0]
