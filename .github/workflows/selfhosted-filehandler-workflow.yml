@@ -16,9 +16,9 @@ defaults:
 
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
-  INSTALLER_FOLDER_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/installer
-  ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/src/Glasswall.FileHandler/artifacts
-  ARTIFACTS_DIR_RELATIVE: ./src/Glasswall.FileHandler/artifacts
+  INSTALLER_FOLDER_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/installer
+  ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts
+  ARTIFACTS_DIR_RELATIVE: ./artifacts
 
 jobs:
   build:
