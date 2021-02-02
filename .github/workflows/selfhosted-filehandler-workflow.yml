@@ -65,7 +65,7 @@ jobs:
         path: ${{ env.ARTIFACTS_DIR }}
 
     - name: Add SP PS Cmdlets
-      pwsh: Add-PsSnapin Microsoft.SharePoint.PowerShell
+      run: powershell Add-PsSnapin Microsoft.SharePoint.PowerShell
 
     - name: Deploy SP Solution Package
-      pwsh: InstallFileHandler.ps1  
+      run: powershell InstallFileHandler.ps1
