@@ -12,8 +12,11 @@ on:
 
 defaults:
   run:
-    working-directory: './SelfHosted/src/Glasswall.FileHandler'
+    working-directory: './SelfHosted'
 
+env:
+  SolutionFile: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  ArtifactsDir: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
 jobs:
   build:
     name: 'Build FileHandler' 
@@ -32,15 +35,15 @@ jobs:
         nuget-version: 5.x
      
     - name: Restore NuGet Packages
-      run: nuget restore Glasswall.FileHandler.sln
+      run: nuget restore ${env.SolutionFile}
  
     - name: Build SP Solution
-      run: msbuild Glasswall.FileHandler.sln /p:Configuration=Release 
+      run: msbuild ${env.SolutionFile} /p:Configuration=Release 
 
     - name: Package SP Solution
-      run: msbuild Glasswall.FileHandler.sln /t:Package /p:Configuration=Release /p:OutputPath=/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
+      run: msbuild ${env.SolutionFile} /t:Package /p:Configuration=Release /p:OutputPath=${env.ArtifactsDir}
 
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts/*.wsp
+        path: ${env.ArtifactsDir}/*.wsp
