@@ -17,13 +17,12 @@ defaults:
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
   ARTIFACTS_DIR: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/src/Glasswall.FileHandler/artifacts
-  RUN_BUILD: ${{ contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false }}
 
 jobs:
   build:
     name: 'Build FileHandler' 
     runs-on: self-hosted
-    if: env.RUN_BUILD  
+    if: contains(toJson(github.event.commits), '***NO_CI***') == false && contains(toJson(github.event.commits), '[ci skip]') == false && contains(toJson(github.event.commits), '[skip ci]') == false
     
     steps:
     - uses: actions/checkout@v2
@@ -48,4 +47,25 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ env.ARTIFACTS_DIR }}/*.wsp
+        path: |
+          ${{ env.ARTIFACTS_DIR }}/*.wsp
+          ./installer/*.ps1
+
+  deploy:
+    name: 'Deploy FileHandler'
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+  
+    - name: 'Download artifacts'
+      uses: actions/download-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR }}
+
+    - name: Add SP PS Cmdlets
+      pwsh: Add-PsSnapin Microsoft.SharePoint.PowerShell
+
+    - name: Deploy SP Solution Package
+      pwsh: InstallFileHandler.ps1  
