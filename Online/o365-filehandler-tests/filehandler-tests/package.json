@@ -1,0 +1,17 @@
+{
+  "name": "jest-gettingstarted",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test-local-win": "SET SHAREPOINT_URL=https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx & jest",
+    "test-local-mac": "SHAREPOINT_URL=https://xamariners.sharepoint.com/sites/GlasswallTest/Shared%20Documents/Forms/AllItems.aspx jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "playwright": "^1.8.0"
+  }
+}
