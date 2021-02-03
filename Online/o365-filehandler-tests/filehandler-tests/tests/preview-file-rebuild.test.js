@@ -7,7 +7,8 @@ let sharepointUrl;
 
 beforeAll(async () => {
   browser = await chromium.launch({headless:false});
-  sharepointUrl = process.env.SHAREPOINT_URL
+  sharepointUrl = process.env.SP_URL
+  console.log(`sharepointUrl:${sharepointUrl}`);
 });
 
 beforeEach(async () => {

@@ -7,7 +7,11 @@ let sharepointUrl;
 
 beforeAll(async () => {
   browser = await chromium.launch({headless:false});
-  sharepointUrl = process.env.SHAREPOINT_URL
+  sharepointUrl = process.env.SP_URL
+  console.log(`sharepointUrl:${sharepointUrl}`);
+  console.log(`SP_SITE:${process.env.SP_SITE}`);
+  console.log(`SP_USER:${process.env.SP_USER}`);
+  console.log(`SP_USER_PWD:${process.env.SP_USER_PWD}`);
   //Upload some file
 });
 
