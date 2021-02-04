@@ -1,0 +1,52 @@
+name: 'SelfHosted FileHandler Release Workflow'
+
+on:
+  release:
+    types: [published]
+  
+defaults:
+  run:
+    working-directory: './SelfHosted'
+
+env:
+  SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  INSTALLER_FOLDER: /SelfHosted/installer
+  ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts
+  ARTIFACTS_DIR_RELATIVE: ./artifacts
+
+jobs:
+  build:
+    name: 'Build FileHandler' 
+    runs-on: self-hosted
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+      with:
+        nuget-version: 5.x
+     
+    - name: Restore NuGet Packages
+      run: nuget restore ${{ env.SOLUTION_FILE }}
+ 
+    - name: Build SP Solution
+      run: msbuild ${{ env.SOLUTION_FILE }} /p:Configuration=Release 
+
+    - name: Package SP Solution
+      run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
+
+    - name: Upload WSP
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
+
+    - name: Upload Installer Files
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1

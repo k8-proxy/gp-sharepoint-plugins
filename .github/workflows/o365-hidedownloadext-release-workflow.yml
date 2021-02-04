@@ -1,0 +1,45 @@
+name: 'O365 HideDownloadExtension Release Workflow'
+
+on:
+  release:
+    types: [published]
+
+env:
+  SPPKG_FILE_NAME: 'glasswall-hide-download-ext.sppkg'
+
+defaults:
+  run:
+    working-directory: './Online/glasswall-hide-download-ext'
+
+jobs:
+  build:
+    name: 'Build Extension'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+      
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v2.1.4
+      with:
+        node-version: 10.x
+    
+    - name: Run npm ci
+      run: npm ci
+    
+    - name: Run npm i -g gulp
+      run: sudo npm i -g gulp
+      if: runner.os == 'macOS'
+    
+    - name: Bundle and package
+      run: |
+        gulp clean
+        gulp bundle --ship
+        gulp package-solution --ship    
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: HideDownloadExtension
+        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
