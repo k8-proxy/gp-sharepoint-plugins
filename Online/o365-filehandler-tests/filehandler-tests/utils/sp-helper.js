@@ -1,3 +1,6 @@
+async function navigateToSP(page) {
+    await page.goto(process.env.SP_URL);
+}
 
 async function login(page) {
     await page.waitForSelector("//input[@name='loginfmt']");
@@ -8,13 +11,6 @@ async function login(page) {
     await page.click("//input[@value='Sign in']"); // Click triggers navigation.
     await page.click("//input[@value='Yes']"); // Click triggers navigation.
     //await page.waitForTimeout(3000); // wait 3 seconds
-
-}
-
-async function navigateToSP(page) {
-
-    await page.goto(process.env.SP_URL);
-
 }
 
 async function uploadFile(page, filePath) {
@@ -23,12 +19,6 @@ async function uploadFile(page, filePath) {
     const handle = await page.$('input[type="file"]');
     await handle.setInputFiles(filePath);
 }
-
-
-
-
-
-
 
 module.exports = {
     login: login,

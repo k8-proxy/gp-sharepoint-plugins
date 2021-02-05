@@ -1,45 +1,44 @@
-const {chromium} = require('playwright');
-const expect = require('expect');
+const { chromium } = require('playwright-chromium');
 const sphelper = require('../utils/sp-helper');
+
 const fileToUpload = 'resources/cleaned_files/TestAutoCurImage.jpg';
+
 let browser;
-let context;
 let page;
-let sharepointUrl;
 
 beforeAll(async () => {
-  browser = await chromium.launch({headless:false});
-  context = await browser.newContext();
-
+    browser = await chromium.launch();
+    page = await browser.newPage();
+    await sphelper.navigateToSP(page);
+    await sphelper.login(page);
+    await sphelper.uploadFile(page, fileToUpload)
 });
-
 
 beforeEach(async () => {
-  page = await context.newPage();
-  await sphelper.navigateToSP(page);
-  await sphelper.login(page);
-  await sphelper.uploadFile(page,fileToUpload)  
-});
-
-
-
-it('Download button is hidden in action bar', async () => {
-  //Select a file
     
-  //verify action bar does not contain default download button
-
 });
 
-// it('Download button is hidden in context menu', async () => {
-//   //Select a file
-//   //verify context menu does not contain default download button
-// });
+describe('Default Download Button', () => {
+    it('Should be hidden in action bar', async () => {
+        //select uploaded file
+        //check for download button in action bar     
+        expect(1 == 1).toBe(true);
+    });
+
+    it('Should be hidden in context menu', async () => {
+        await page.goto(process.env.SP_URL);
+        //select uploaded file
+        //check for download button in action bar
+        expect(1 == 1).toBe(true);
+    });
+})
 
 afterEach(async () => {
-//  delete the uploaded file
-//  await page.close();
+    
 });
 
-// afterAll(async () => {
-//   await browser.close();
-//});
+afterAll(async () => {
+    //delete uploaded file
+    await page.close();
+    await browser.close();
+});
