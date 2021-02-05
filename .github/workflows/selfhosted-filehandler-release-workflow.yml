@@ -39,14 +39,12 @@ jobs:
     - name: Package SP Solution
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
-    - name: Upload WSP
-      uses: actions/upload-artifact@v2
+    - name: Zip artifacts
+      run: zip -r -q ./artifacts/GWSharepointSolution.zip ./artifcats/Glasswall.FileHandler.wsp        
+        
+    - name: Upload release binaries
+      uses: alexellis/upload-assets@0.2.2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
-        name: SelfHostedFileHandler
-        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
-
-    - name: Upload Installer Files
-      uses: actions/upload-artifact@v2
-      with:
-        name: SelfHostedFileHandler
-        path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1
+        asset_paths: '["./artifcats/*.zip"]'

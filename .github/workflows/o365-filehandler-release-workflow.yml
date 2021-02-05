@@ -32,7 +32,12 @@ jobs:
       run: ./build
       shell: pwsh
     
-    - uses: actions/upload-artifact@v2
+    - name: Zip artifacts
+      run: zip -r -q ./artifacts/GWO365FileHandlerWeb.zip ./artifacts/
+
+    - name: Upload release binaries
+      uses: alexellis/upload-assets@0.2.2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
-        name: FileHandlerWebApp
-        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall.o365.filehandler/Net5/artifacts/
+        asset_paths: '["./artifacts/*.zip"]'
