@@ -38,8 +38,14 @@ jobs:
         gulp bundle --ship
         gulp package-solution --ship    
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+
+    - name: Zip artifacts
+      run: zip -r -q ./sharepoint/solution/GWO365Extensions.zip ./sharepoint/solution/glasswall-hide-download-ext.sppkg        
+        
+
+    - name: Upload release binaries
+      uses: alexellis/upload-assets@0.2.2
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
-        name: HideDownloadExtension
-        path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
+        asset_paths: '["./sharepoint/solution/*.zip"]'
