@@ -4,6 +4,6 @@
         Title="Hide Default Download"
         Location="ClientSideExtension.ApplicationCustomizer"
         ComponentId="f5b509a9-25de-454b-963a-ef384ebdbbbd"
-        Properties="{&quot;commandName&quot;:&quot;downloadCommand&quot;}">
+        Properties="{&quot;commandName&quot;:&quot;download,downloadCommand&quot;,&quot;executeFrequency&quot;:300}">
     </ClientSideComponentInstance>
 </Elements>
