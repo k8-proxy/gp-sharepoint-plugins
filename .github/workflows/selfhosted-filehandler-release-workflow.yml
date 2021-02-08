@@ -39,7 +39,7 @@ jobs:
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
     - name: Zip artifacts
-      run: Compress-Archive -Path '.\artifacts\*.wsp' -DestinationPath '.\artifacts\GWSharePointSolution.zip'
+      run: Compress-Archive -Path 'C:\home\runner\work\gp-sharepoint-plugins\gp-sharepoint-plugins\SelfHosted\artifacts\*.wsp' -DestinationPath 'C:\home\runner\work\gp-sharepoint-plugins\gp-sharepoint-plugins\SelfHosted\artifacts\GWSharePointSolution.zip'
       shell: powershell
       
     - name: Release
