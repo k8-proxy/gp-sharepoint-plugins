@@ -38,9 +38,33 @@ jobs:
     - name: Package SP Solution
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
+    - name: Upload WSP
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
+
+    - name: Upload Installer Files
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1    
+
+  release:
+    name: 'Release FileHandler'
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: 'Download artifacts'
+      uses: actions/download-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}
+
     - name: Zip artifacts
-      run: Compress-Archive -Path 'C:\home\runner\work\gp-sharepoint-plugins\gp-sharepoint-plugins\SelfHosted\artifacts\*.wsp' -DestinationPath 'C:\home\runner\work\gp-sharepoint-plugins\gp-sharepoint-plugins\SelfHosted\artifacts\GWSharePointSolution.zip'
-      shell: powershell
+      run: Compress-Archive -Path '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/*' -DestinationPath '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/GWSharePointSolution.zip'
+      shell: pwsh
       
     - name: Release
       uses: fnkr/github-action-ghr@v1
