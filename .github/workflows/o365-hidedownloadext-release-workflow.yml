@@ -5,7 +5,8 @@ on:
     types: [published]
 
 env:
-  SPPKG_FILE_NAME: 'glasswall-hide-download-ext.sppkg'
+  ZIP_OUTPUT: '${{ github.workspace }}/Online/glasswall-hide-download-ext/sharepoint/solution/GWO365FileHandlerExtension.zip'
+  ZIP_INPUT: '${{ github.workspace }}/Online/glasswall-hide-download-ext/sharepoint/solution/glasswall-hide-download-ext.sppkg'
 
 defaults:
   run:
@@ -40,12 +41,11 @@ jobs:
 
 
     - name: Zip artifacts
-      run: zip -r -q ./sharepoint/solution/GWO365Extensions.zip ./sharepoint/solution/glasswall-hide-download-ext.sppkg        
-        
+      run: Compress-Archive -Path './sharepoint/solution/glasswall-hide-download-ext.sppkg' -DestinationPath './sharepoint/solution/GWO365FileHandlerExtension.zip'
+      shell: pwsh
 
-    - name: Upload release binaries
-      uses: alexellis/upload-assets@0.2.2
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
       env:
+        GHR_PATH: '${{ env.ZIP_OUTPUT }}'
         GITHUB_TOKEN: ${{ github.token }}
-      with:
-        asset_paths: '["./sharepoint/solution/*.zip"]'

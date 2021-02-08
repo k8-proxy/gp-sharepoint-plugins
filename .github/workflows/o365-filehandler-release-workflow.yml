@@ -8,6 +8,9 @@ defaults:
   run:
     working-directory: './Online/glasswall.o365.filehandler/Net5'
 
+env:
+  ZIP_OUTPUT: '${{ github.workspace }}/Online/glasswall.o365.filehandler/Net5/artifacts/GWO365FileHandlerWebApp.zip'
+
 jobs:
   build:
     name: 'Build FileHandler' 
@@ -33,11 +36,11 @@ jobs:
       shell: pwsh
     
     - name: Zip artifacts
-      run: zip -r -q ./artifacts/GWO365FileHandlerWeb.zip ./artifacts/
-
-    - name: Upload release binaries
-      uses: alexellis/upload-assets@0.2.2
+      run: Compress-Archive -Path './artifacts/*' -DestinationPath './artifacts/GWO365FileHandlerWebApp.zip'
+      shell: pwsh
+    
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
       env:
+        GHR_PATH: '${{ env.ZIP_OUTPUT }}'
         GITHUB_TOKEN: ${{ github.token }}
-      with:
-        asset_paths: '["./artifacts/*.zip"]'
