@@ -48,7 +48,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: SelfHostedFileHandler
-        path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1    
+        path: ${{ github.workspace }}/SelfHosted/installer/*.ps1
 
   release:
     name: 'Release FileHandler'
