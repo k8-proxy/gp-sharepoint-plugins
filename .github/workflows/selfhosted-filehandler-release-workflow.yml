@@ -11,7 +11,7 @@ defaults:
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
   ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts
-  ZIP_FILE_NAME: GWSharepointSolution.zip
+  ZIP_FILE_NAME: GWSharePointSolution.zip
   
 jobs:
   build:
@@ -39,12 +39,12 @@ jobs:
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
     - name: Copy installer files      
-      run: Copy-Item '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/*.ps1' '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts'
-      shell: pwsh
+      run: Copy-Item './artifacts/*.ps1' './artifacts/'
+      shell: powershell
  
     - name: Zip artifacts
-      run: Compress-Archive -Path '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/*' -DestinationPath '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/GWSharepointSolution.zip'
-      shell: pwsh
+      run: Compress-Archive -Path './artifacts/*' -DestinationPath './artifacts/GWSharePointSolution.zip'
+      shell: powershell
       
     - name: Release
       uses: fnkr/github-action-ghr@v1
