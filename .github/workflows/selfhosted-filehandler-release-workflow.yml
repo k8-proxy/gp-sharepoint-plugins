@@ -10,6 +10,7 @@ defaults:
 
 env:
   SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  INSTALLER_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/installer
   ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts
   ZIP_FILE_NAME: GWSharePointSolution.zip
   
@@ -39,11 +40,11 @@ jobs:
       run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
 
     - name: Copy installer files      
-      run: Copy-Item './artifacts/*.ps1' './artifacts/'
+      run: Copy-Item '${github.workspace}/SelfHosted/installer/*.ps1' '${env:ARTIFACTS_DIR_ABSOLUTE}}/'
       shell: powershell
  
     - name: Zip artifacts
-      run: Compress-Archive -Path './artifacts/*' -DestinationPath './artifacts/GWSharePointSolution.zip'
+      run: Compress-Archive -Path '${env:ARTIFACTS_DIR_ABSOLUTE}/*' -DestinationPath '${env:ARTIFACTS_DIR_ABSOLUTE}/${env:ZIP_FILE_NAME}'
       shell: powershell
       
     - name: Release
