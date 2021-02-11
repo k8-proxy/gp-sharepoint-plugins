@@ -101,9 +101,6 @@
       <SharePointProjectItemId>{05f5e437-beee-43a6-8b0e-a8853132d0e2}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
-    <None Include="Layouts\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{bb983030-4624-4cb1-9540-e4b1e159a53b}</SharePointProjectItemId>
-    </None>
     <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{6bef0167-103a-4727-9bb0-ab524bf324f2}</PackageId>
@@ -126,7 +123,6 @@
     <Content Include="GWCustomActions\Elements.xml" />
     <Content Include="GWDocLibEventReceiver\Elements.xml" />
     <Content Include="Images\Glasswall.FileHandler\GWLogo48.png" />
-    <Content Include="Layouts\Glasswall.FileHandler\GWKey.txt" />
     <Content Include="ADMIN\Glasswall.FileHandler\GWSettings.aspx" />
     <Content Include="Newtonsoft.Json.dll" />
   </ItemGroup>

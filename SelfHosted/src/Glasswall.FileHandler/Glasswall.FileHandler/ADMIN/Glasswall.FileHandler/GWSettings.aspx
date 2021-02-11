@@ -9,30 +9,40 @@
 
 <asp:Content ID="PageHead" ContentPlaceHolderID="PlaceHolderAdditionalPageHead" runat="server">
      <style type="text/css">
-        .btnRight {
-           float:right;
-        }
-        .txtAPIinput{
-            min-width:200px;
-            width:100%;
-            float:right;
-        }
+         .gw-tbl-main {
+             margin: 0;
+         }
+
+             .gw-tbl-main tr {
+                 line-height: 30px;
+             }
+
+         .btnRight {
+             float: right;
+             margin-top: 10px;
+         }
+
+         .txtAPIinput {
+             min-width: 200px;
+             width: 100%;
+             float: right;
+         }
     </style>
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <table style="width: 80%;">
+    <table style="width: 80%;" class="gw-tbl-main">
         <tr>
             <td>
                 <asp:Label ID="lblAPIUrl" runat="server" Text="Label">Application REST API Url</asp:Label></td>
             <td>
-                <asp:TextBox ID="txt_APIUrl" runat="server" CssClass="txtAPIinput"></asp:TextBox></td>
+                <asp:TextBox ID="txt_APIUrl" runat="server" CssClass="txtAPIinput" placeholder="<Glasswall Rebuild Api Url>"></asp:TextBox></td>
         </tr>
         <tr>
             <td>
                 <asp:Label ID="lblAPIKey" runat="server">Application Secret Key</asp:Label></td>
             <td>
-                <asp:TextBox ID="txt_APIKey" runat="server" CssClass="txtAPIinput"></asp:TextBox></td>
+                <asp:TextBox ID="txt_APIKey" runat="server" CssClass="txtAPIinput" placeholder="<Glasswall Rebuild Api Key>"></asp:TextBox></td>
         </tr>
         <tr>
             <td colspan="2"><asp:Button ID="btnSave" runat="server" Text="Save" CssClass="btnRight" OnClick="btnSave_Click" ToolTip="Click here to save the settings" /></td>

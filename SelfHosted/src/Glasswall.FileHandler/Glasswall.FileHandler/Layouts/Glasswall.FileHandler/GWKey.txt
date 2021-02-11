@@ -1,4 +1,0 @@
-﻿{
-  "GwRebuildApi": "<Glasswall Rebuild Api Url>",
-  "GwRebuildApiKey": "<Glasswall Rebuild Api Key>"
-}
