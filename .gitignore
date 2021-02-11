@@ -350,3 +350,7 @@ MigrationBackup/
 .ionide/
 
 .env
+
+# Gauge CI env
+env/ci/aut.properties
+env/default/aut.properties
