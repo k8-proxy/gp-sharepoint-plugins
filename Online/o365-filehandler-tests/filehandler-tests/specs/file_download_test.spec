@@ -51,3 +51,7 @@ tags: file-handler, download, preview-page
 * Delete selected file(s)
 
 
+____________________________________
+Teardown steps are here
+
+* Go to the SharePoint home page

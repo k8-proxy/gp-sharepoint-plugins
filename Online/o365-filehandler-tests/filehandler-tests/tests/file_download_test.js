@@ -34,6 +34,10 @@ beforeSpec(async () => {
 
 });
 
+step("Go to the SharePoint home page", async () => {
+    const app_endpoint = process.env.SP_URL
+    await page.goto(app_endpoint);
+});
 
 step("On the choosen SharePoint site", async () => {
     await page.click("//span[text()='SharePoint']");
