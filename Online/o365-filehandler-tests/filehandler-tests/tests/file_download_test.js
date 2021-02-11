@@ -71,10 +71,12 @@ step("Upload file <file_name>", async (file_name) => {
     // Upload Currupted File
     const handle = await page.$('input[type="file"]');
     await handle.setInputFiles('./resources/corrupted_files/' + currentFileName);
-    await page.waitForTimeout(3000); // wait 3 seconds
+    await page.waitForTimeout(10000); // wait 10 seconds
 });
 
 step("Select file <file_name>", async (file_name) => {
+    await page.waitForTimeout(5000); // wait 5 seconds
+
     const checkBox = "//div[@aria-label='" + file_name + "']/div"
     page.waitForSelector(checkBox)
     // Select file only if not already selected
