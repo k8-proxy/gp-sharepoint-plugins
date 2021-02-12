@@ -122,3 +122,20 @@ This solution contains SPFx Extension of Application Customizer type. It execute
 ### Deploy Package through CI/CD Release
 - Open the Release 'Glasswall-Office365-Hide-Download-CI-Release' on DevOps (tbd).
 - Open latest Release and Re-Deploy OR Create New Release and Deploy.
+
+## Configure Hide Download Extension Solution
+SharePoint Online keeps tenant-wide extension details in a List called, "Tenant Wide Extensions" on App Catalog Site.
+For Hide-Downlaod-Extension, we keep following two properties which can be configured:
+    1. CommandName: This is the comma separated values of all the possible values of attribute 'data-automationid' of HTML controls. We use it to track the download button on the page.
+    2. ExecuteFrequency: The is numeric value which defines the frequency interval at which the extension checks for download buttons on page and hides it.
+
+### Steps to update Hide Download Extension Properties
+The default values are already configured however if we would like to customize, we can update them as follows:
+- Navigate to App Catalog Site on your tenant (i.e. https://{tenant}.sharepoint.com/sites/apps).
+- Click on 'Site contents' in the Left Navigation.
+- Click on 'Tenant Wide Extensions' List.
+- Edit the item with title, 'Hide Default Download'.
+- You can make changes in the field called "Component Properties" to update extension properties. 
+- Make sure you ONLY update highlighted values as follows and keep the JSON format as it is:
+    * {"commandName":"<b><i>download,downloadCommand</i></b>","executeFrequency":<b><i>300</i></b>}
+- Please note that the changes to the list will be applied to the extension on your tenant in 2 to 24 hours.
