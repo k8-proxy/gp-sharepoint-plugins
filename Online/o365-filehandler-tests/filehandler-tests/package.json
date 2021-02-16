@@ -6,7 +6,9 @@
     "test": "gauge run --verbose specs/"
   },
   "dependencies": {
+    "chai": "latest",
     "filecompare": "^1.0.4",
     "playwright": "latest"
-  }
+  },
+  "devDependencies": {}
 }
