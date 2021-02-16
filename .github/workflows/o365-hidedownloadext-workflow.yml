@@ -49,14 +49,6 @@ jobs:
         name: HideDownloadExtension
         path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
 
-    
-
-    - name: Microsoft 365 Login Status
-      run: m365 status         
-
-    - name: Microsoft 365 Logout
-      run: m365 logout          
-
   deploy:
     needs: build
     name: 'Deploy GW-DEV'      
