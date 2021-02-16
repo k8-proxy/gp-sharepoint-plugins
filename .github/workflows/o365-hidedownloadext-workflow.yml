@@ -49,6 +49,25 @@ jobs:
         name: HideDownloadExtension
         path: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/Online/glasswall-hide-download-ext/sharepoint/solution/
 
+    - name: Upgrade CLI for Microsoft365 with preview version
+      run: sudo npm i -g @pnp/cli-microsoft365@next    
+
+    - name: Write PEM File
+      id: write_file
+      uses: timheuer/base64-to-file@v1
+      with:
+        fileName: 'm365auth.pem'
+        encodedString: ${{ secrets.PEM_ENCODED }}
+
+    - name: Microsoft 365 Login with Cert
+      run: m365 login --authType certificate --certificateFile ${{ steps.write_file.outputs.filePath }} --appId ${{ secrets.AADAPPID }} --tenant ${{ secrets.TENANTID }}
+
+    - name: Microsoft 365 Login Status
+      run: m365 status         
+
+    - name: Microsoft 365 Logout
+      run: m365 logout          
+
   deploy:
     needs: build
     name: 'Deploy GW-DEV'      
