@@ -13,9 +13,6 @@ namespace Glasswall.FileHandler.Layouts.Glasswall.FileHandler
 {
     public partial class GWSettings : LayoutsPageBase
     {
-        const string PROPS_REBUILD_API_URL = "GlasswallRebuildApiUrl";
-        const string PROPS_REBUILD_API_KEY = "GlasswallRebuildApiKey";
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -69,14 +66,14 @@ namespace Glasswall.FileHandler.Layouts.Glasswall.FileHandler
             SPFarm farmObject = SPFarm.Local;
             if (farmObject.Properties != null && farmObject.Properties.Count > 0)
             {
-                if (farmObject.Properties.ContainsKey(PROPS_REBUILD_API_URL))
+                if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_URL))
                 {
-                    txt_APIUrl.Text = Convert.ToString(farmObject.Properties[PROPS_REBUILD_API_URL]);
+                    txt_APIUrl.Text = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_URL]);
                     GWUtility.WriteLog($"Glasswall Rebuild Api Url found: {txt_APIUrl.Text}.");
                 }
-                if (farmObject.Properties.ContainsKey(PROPS_REBUILD_API_KEY))
+                if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_KEY))
                 {
-                    txt_APIKey.Text = Convert.ToString(farmObject.Properties[PROPS_REBUILD_API_KEY]);
+                    txt_APIKey.Text = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_KEY]);
                     string strTrimmedKey = txt_APIKey.Text.Trim().Length > 3 ? txt_APIKey.Text.Trim().Substring(0, 3) : txt_APIKey.Text.Trim();
                     GWUtility.WriteLog($"Glasswall Rebuild Api Key found: {strTrimmedKey}xxxxxxxxx.");
                 }
@@ -88,8 +85,8 @@ namespace Glasswall.FileHandler.Layouts.Glasswall.FileHandler
             SPFarm farmObject = SPFarm.Local;
             if (farmObject.Properties != null)
             {
-                farmObject.Properties[PROPS_REBUILD_API_URL] = apiUrl;
-                farmObject.Properties[PROPS_REBUILD_API_KEY] = apiKey;
+                farmObject.Properties[GWConstants.PROPS_REBUILD_API_URL] = apiUrl;
+                farmObject.Properties[GWConstants.PROPS_REBUILD_API_KEY] = apiKey;
                 farmObject.Update();
             }
         }

@@ -3,8 +3,7 @@
     public class GWConstants
     {
         public const string FileHandlerName = "GlasswallDownloadHandler";
-        public const string RebuildApiKeySettingsName = "GwRebuildApiKey";
-        public const string RebuildApiUrlSettingsName = "GwRebuildApi";
-        public const string SettingsPath = @"\Glasswall.FileHandler\GWKey.txt";
+        public const string PROPS_REBUILD_API_URL = "GlasswallRebuildApiUrl";
+        public const string PROPS_REBUILD_API_KEY = "GlasswallRebuildApiKey";
     }
 }

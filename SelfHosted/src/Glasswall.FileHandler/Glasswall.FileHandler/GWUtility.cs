@@ -1,5 +1,6 @@
 ﻿using Microsoft.SharePoint.Administration;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 using System.Net;
 
@@ -7,12 +8,17 @@ namespace Glasswall.FileHandler
 {
     static class GWUtility
     {
-        private static string gwRebuildApi = string.Empty;
-        private static string gwRebuildApiKey = string.Empty;
         private static SPDiagnosticsService logger = null;
         private static SPDiagnosticsCategory logCategory = null;
         private static SPDiagnosticsCategory logErrorCategory = null;
         private static bool IsLoaded = false;
+
+        private static string _APIUrl = string.Empty;
+        public static string APIUrl { get { return _APIUrl; } }
+
+        private static string _APIKey = string.Empty;
+        public static string APIKey { get { return _APIKey; } }
+
         static GWUtility()
         {
             logger = SPDiagnosticsService.Local;
@@ -24,19 +30,19 @@ namespace Glasswall.FileHandler
         {
             if (!IsLoaded)
             {
-                var jsonUrl = serverUrl + "/_layouts/15/Glasswall.FileHandler/gwkey.txt";
-                JObject jsonConfig = JObject.Parse(GetFileContent(jsonUrl));
-                foreach (JProperty prop in jsonConfig.Properties())
+                SPFarm farmObject = SPFarm.Local;
+                if (farmObject.Properties != null && farmObject.Properties.Count > 0)
                 {
-                    if (prop.Name == GWConstants.RebuildApiKeySettingsName)
+                    if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_URL))
                     {
-                        gwRebuildApiKey = prop.Value.ToString();
-                        WriteLog($"Property Key GwRebuildApiKey Found: {gwRebuildApiKey.Substring(0,3)}xxxxxxx");
+                        _APIUrl = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_URL]);
+                        WriteLog($"Glasswall Rebuild Api Url found: {_APIUrl}.");
                     }
-                    if (prop.Name == GWConstants.RebuildApiUrlSettingsName)
+                    if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_KEY))
                     {
-                        gwRebuildApi = prop.Value.ToString();
-                        WriteLog($"Property Key GwRebuildApi Found:{gwRebuildApi}");
+                        _APIKey = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_KEY]);
+                        string strTrimmedKey = _APIKey.Trim().Length > 3 ? _APIKey.Trim().Substring(0, 3) : _APIKey.Trim();
+                        WriteLog($"Glasswall Rebuild Api Key found: {strTrimmedKey}xxxxxxxxx.");
                     }
                 }
                 IsLoaded = true;
@@ -51,21 +57,5 @@ namespace Glasswall.FileHandler
         {
             logger.WriteTrace(0, logErrorCategory, TraceSeverity.Unexpected, message);
         }
-        private static string GetFileContent(string path)
-        {
-            WebRequest request = WebRequest.Create(path);
-            request.Credentials = CredentialCache.DefaultCredentials;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-            return responseFromServer;
-        }
-
-        public static string APIUrl { get { return gwRebuildApi; } }
-        public static string APIKey { get { return gwRebuildApiKey; } }
     }
 }
