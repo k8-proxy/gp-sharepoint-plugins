@@ -21,13 +21,12 @@ jobs:
     defaults:
       run:
         working-directory: './Online/o365-filehandler-tests/filehandler-tests'
-
     environment: GW-DEV
     env:
-      SP_URL=${{ secrets.SPO_URL }}
-      SP_USER=${{ secrets.SPO_USER }}
-      SP_USER_PWD=${{ secrets.SPO_USER_PWD }}
-      SITE_NAME=${{ secrets.SPO_SITE_NAME }}
+      SP_URL: ${{ secrets.SPO_URL }}
+      SP_USER: ${{ secrets.SPO_USER }}
+      SP_USER_PWD: ${{ secrets.SPO_USER_PWD }}
+      SITE_NAME: ${{ secrets.SPO_SITE_NAME }}
       
     steps:
     - name: Checkout code
