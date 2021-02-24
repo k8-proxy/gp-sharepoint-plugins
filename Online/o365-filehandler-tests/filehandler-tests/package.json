@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Starter template for writing JavaScript tests for Gauge",
   "scripts": {
-    "test": "gauge run --verbose specs/"
+    "test": "gauge run --verbose specs/",
+    "test-ci": "gauge run --env ci specs/"
   },
   "dependencies": {
     "chai": "latest",
