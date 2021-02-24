@@ -1,4 +1,5 @@
 ﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.Utilities;
 using Microsoft.SharePoint.WebControls;
 using Newtonsoft.Json.Linq;
@@ -12,70 +13,44 @@ namespace Glasswall.FileHandler.Layouts.Glasswall.FileHandler
 {
     public partial class GWSettings : LayoutsPageBase
     {
-        string JSONPATH = SPContext.Current.Site.Url + "/_layouts/15/Glasswall.FileHandler/gwkey.txt";
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
+            if (!Page.IsPostBack)
             {
-                if (!Page.IsPostBack)
+                try
                 {
-                    GWUtility.WriteLog("Handler JSON Url: " + JSONPATH);
-                    JObject jsonConfig = JObject.Parse(ReadSettings(JSONPATH));
-                    foreach (JProperty prop in jsonConfig.Properties())
-                    {
-                        GWUtility.WriteLog($"{prop.Name}- {prop.Value}");
-                        if (prop.Name == GWConstants.RebuildApiKeySettingsName)
-                        {
-                            txt_APIKey.Text = prop.Value.ToString();
-                            GWUtility.WriteLog($"GW rebuild api key found: {txt_APIKey.Text.Substring(0,3)}xxxxxxxxx.");
-                        }
-                        if (prop.Name == GWConstants.RebuildApiUrlSettingsName)
-                        {
-                            txt_APIUrl.Text = prop.Value.ToString();
-                            GWUtility.WriteLog($"GW rebuild api url found: {txt_APIUrl.Text}.");
-                        }
-                    }
+                    PopulateGlasswallRebuildApiSettings();
                 }
-            }
-            catch (Exception ex)
-            {
-                lbl_status.Text = ex.Message;
-                lbl_status.Visible = true;
+                catch (Exception ex)
+                {
+                    lbl_status.Text = ex.Message;
+                    lbl_status.Visible = true;
+                }
             }
         }
 
-        
         protected void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                GWUtility.WriteLog("Saving changes ...");
+                GWUtility.WriteLog("Saving Glasswall Rebuild Api settings changes ...");
                 if (string.IsNullOrEmpty(txt_APIUrl.Text.Trim()))
                 {
-                    lbl_status.Text = "Glasswall rebuild api URL cannot be null. Please enter the URL.";
+                    lbl_status.Text = "Glasswall Rebuild Api Url cannot be null. Please enter the URL.";
                     lbl_status.Visible = true;
                     return;
                 }
                 if (string.IsNullOrEmpty(txt_APIKey.Text.Trim()))
                 {
-                    lbl_status.Text = "Glasswall rebuild api key cannot be null. Please enter the key.";
+                    lbl_status.Text = "Glasswall Rebuild Api Key cannot be null. Please enter the key.";
                     lbl_status.Visible = true;
                     return;
                 }
-                JObject gwSettingsJson = new JObject(
-                                new JProperty(GWConstants.RebuildApiKeySettingsName, txt_APIKey.Text),
-                                new JProperty(GWConstants.RebuildApiUrlSettingsName, txt_APIUrl.Text)
-                            );
 
-                SPSecurity.RunWithElevatedPrivileges(delegate ()
-                {
-                    SaveSettings(JSONPATH, gwSettingsJson.ToString());
-                }
-                );
+                SaveGlasswallRebuildApiSettings(txt_APIUrl.Text.Trim(), txt_APIKey.Text.Trim());
 
                 lbl_status.ForeColor = Color.DarkGreen;
-                lbl_status.Text = "Application settings successfully saved."; 
+                lbl_status.Text = "Glasswall Rebuild Api settings saved successfully."; 
                 lbl_status.Visible = true;
             }
             catch (Exception ex)
@@ -86,24 +61,34 @@ namespace Glasswall.FileHandler.Layouts.Glasswall.FileHandler
             }
         }
 
-        private string ReadSettings(string path)
+        private void PopulateGlasswallRebuildApiSettings() 
         {
-            WebRequest request = WebRequest.Create(path);
-            request.Credentials = CredentialCache.DefaultCredentials;
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-            return responseFromServer;
+            SPFarm farmObject = SPFarm.Local;
+            if (farmObject.Properties != null && farmObject.Properties.Count > 0)
+            {
+                if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_URL))
+                {
+                    txt_APIUrl.Text = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_URL]);
+                    GWUtility.WriteLog($"Glasswall Rebuild Api Url found: {txt_APIUrl.Text}.");
+                }
+                if (farmObject.Properties.ContainsKey(GWConstants.PROPS_REBUILD_API_KEY))
+                {
+                    txt_APIKey.Text = Convert.ToString(farmObject.Properties[GWConstants.PROPS_REBUILD_API_KEY]);
+                    string strTrimmedKey = txt_APIKey.Text.Trim().Length > 3 ? txt_APIKey.Text.Trim().Substring(0, 3) : txt_APIKey.Text.Trim();
+                    GWUtility.WriteLog($"Glasswall Rebuild Api Key found: {strTrimmedKey}xxxxxxxxx.");
+                }
+            }
         }
-        private void SaveSettings(string path, string data)
-        {           
-            string sPath = $"{SPUtility.GetCurrentGenericSetupPath(@"TEMPLATE\LAYOUTS")}{GWConstants.SettingsPath}";
-            GWUtility.WriteLog($"Saving settings to path:{sPath}");
-            File.WriteAllText(sPath, data, Encoding.UTF8);
+
+        private void SaveGlasswallRebuildApiSettings(string apiUrl, string apiKey)
+        {
+            SPFarm farmObject = SPFarm.Local;
+            if (farmObject.Properties != null)
+            {
+                farmObject.Properties[GWConstants.PROPS_REBUILD_API_URL] = apiUrl;
+                farmObject.Properties[GWConstants.PROPS_REBUILD_API_KEY] = apiKey;
+                farmObject.Update();
+            }
         }
     }
 }

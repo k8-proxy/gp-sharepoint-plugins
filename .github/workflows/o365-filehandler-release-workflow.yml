@@ -1,0 +1,46 @@
+name: 'O365 FileHandler Release Workflow'
+
+on:
+  release:
+    types: [published]
+
+defaults:
+  run:
+    working-directory: './Online/glasswall.o365.filehandler/Net5'
+
+env:
+  ZIP_OUTPUT: '${{ github.workspace }}/Online/glasswall.o365.filehandler/Net5/artifacts/GWO365FileHandlerWebApp.zip'
+
+jobs:
+  build:
+    name: 'Build FileHandler' 
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Build & Publish
+      run: ./build
+      shell: pwsh
+    
+    - name: Zip artifacts
+      run: Compress-Archive -Path './artifacts/*' -DestinationPath './artifacts/GWO365FileHandlerWebApp.zip'
+      shell: pwsh
+    
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
+      env:
+        GHR_PATH: '${{ env.ZIP_OUTPUT }}'
+        GITHUB_TOKEN: ${{ github.token }}

@@ -1,0 +1,73 @@
+name: 'SelfHosted FileHandler Release Workflow'
+
+on:
+  release:
+    types: [published]
+  
+defaults:
+  run:
+    working-directory: './SelfHosted'
+
+env:
+  SOLUTION_FILE: ./src/Glasswall.FileHandler/Glasswall.FileHandler.sln
+  ARTIFACTS_DIR_ABSOLUTE: /home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts
+  ZIP_FILE_NAME: GWSharePointSolution.zip
+  
+jobs:
+  build:
+    name: 'Build FileHandler' 
+    runs-on: self-hosted
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+      with:
+        nuget-version: 5.x
+     
+    - name: Restore NuGet Packages
+      run: nuget restore ${{ env.SOLUTION_FILE }}
+ 
+    - name: Build SP Solution
+      run: msbuild ${{ env.SOLUTION_FILE }} /p:Configuration=Release 
+
+    - name: Package SP Solution
+      run: msbuild ${{ env.SOLUTION_FILE}} /t:Package /p:Configuration=Release /p:OutputPath=${{ env.ARTIFACTS_DIR_ABSOLUTE }}
+
+    - name: Upload WSP
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/*.wsp
+
+    - name: Upload Installer Files
+      uses: actions/upload-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ github.workspace }}/SelfHosted/installer/*.ps1
+
+  release:
+    name: 'Release FileHandler'
+    runs-on: ubuntu-latest
+    needs: build 
+    steps:
+
+    - name: 'Download artifacts'
+      uses: actions/download-artifact@v2
+      with:
+        name: SelfHostedFileHandler
+        path: ${{ env.ARTIFACTS_DIR_ABSOLUTE }}
+
+    - name: Zip artifacts
+      run: Compress-Archive -Path '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/*' -DestinationPath '/home/runner/work/gp-sharepoint-plugins/gp-sharepoint-plugins/SelfHosted/artifacts/GWSharePointSolution.zip'
+      shell: pwsh
+      
+    - name: Release
+      uses: fnkr/github-action-ghr@v1
+      env:
+        GHR_PATH: '${{ env.ARTIFACTS_DIR_ABSOLUTE }}/${{env.ZIP_FILE_NAME}}'
+        GITHUB_TOKEN: ${{ github.token }}

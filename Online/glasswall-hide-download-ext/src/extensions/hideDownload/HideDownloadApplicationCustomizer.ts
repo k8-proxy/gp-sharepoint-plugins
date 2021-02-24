@@ -16,13 +16,14 @@ const LOG_SOURCE: string = 'HideDownloadApplicationCustomizer';
  */
 export interface IHideDownloadApplicationCustomizerProperties {
 	commandName: string;
+	executeFrequency: number;
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
 export default class HideDownloadApplicationCustomizer
 	extends BaseApplicationCustomizer<IHideDownloadApplicationCustomizerProperties> {
 
-	private _DOWNLOAD_COMMAND = "downloadCommand";
+	private _DownloadCommands: string[] = [];
 	private _CommandBarClientId = "od-TopBar-item";
 	private _ItemListClientId = "od-ItemContent-list";
 
@@ -49,6 +50,15 @@ export default class HideDownloadApplicationCustomizer
 		Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 		console.log(`Initialized ${strings.Title}`);
 
+		//Set Download Commands
+		if (this.properties.commandName) {
+			this._DownloadCommands = this.properties.commandName.split(",").map(c => c.trim());
+		} else {
+			this._DownloadCommands.push("download");
+			this._DownloadCommands.push("downloadCommand");
+		}
+
+		// Associate observers and events.
 		this.associateObserverAndEvents();
 
 		// Associate observers and events on page navigations as well.
@@ -58,6 +68,13 @@ export default class HideDownloadApplicationCustomizer
 				this.associateObserverAndEvents();				
 			}, 100);
 		});
+
+		// Additionally, if the download buttons are not hidden with event listners, we can hide them manually and retry every execute frequency interval (i.e. 300 ms).
+		if (this.properties.executeFrequency && this.properties.executeFrequency >= 50) {
+			setInterval(() => {
+				this.hideDownloadButtons();
+			}, this.properties.executeFrequency);	
+		}
 
 		return Promise.resolve();
 	}
@@ -223,7 +240,7 @@ export default class HideDownloadApplicationCustomizer
 			let xn_glasswall_attr = btn.getAttribute(ATTR_GW_DOWNLOAD_BUTTON);
 			if (!xn_glasswall_attr) {
 				let xn_commandname = btn.getAttribute("data-automationid");
-				if (xn_commandname == this._DOWNLOAD_COMMAND) {
+				if (this._DownloadCommands.indexOf(xn_commandname) >= 0) {
 					btn.setAttribute(ATTR_GW_DOWNLOAD_BUTTON, "true");
 					btn.style.display = "none";
 				}

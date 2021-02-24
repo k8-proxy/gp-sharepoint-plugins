@@ -9,7 +9,8 @@
         "f5b509a9-25de-454b-963a-ef384ebdbbbd": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "commandName": "downloadCommand"
+            "commandName": "download,downloadCommand",
+            "executeFrequency": 300
           }
         }
       }
@@ -20,7 +21,8 @@
         "f5b509a9-25de-454b-963a-ef384ebdbbbd": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "commandName": "downloadCommand"
+            "commandName": "download,downloadCommand",
+            "executeFrequency": 300
           }
         }
       }
