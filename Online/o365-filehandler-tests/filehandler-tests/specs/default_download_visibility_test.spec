@@ -41,8 +41,9 @@ tags: default-download
 * On the choosen SharePoint site
 * Naviagte to the Documents section
 * Upload file <file_name>
-* Select file <file_name>
+* Preview file <file_name>
 * Validate Default Download Button is Hidden in Preview
+* Close preview
 * Select file <file_name>
 * Delete selected file(s)
 
