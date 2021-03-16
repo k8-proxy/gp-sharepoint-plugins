@@ -14,10 +14,24 @@ namespace Glasswall.FileHandler
         private static bool IsLoaded = false;
 
         private static string _APIUrl = string.Empty;
-        public static string APIUrl { get { return _APIUrl; } }
+        public static string APIUrl
+        {
+            get
+            {
+                _APIUrl = GetConfigValue(GWConstants.PROPS_REBUILD_API_URL);
+                return _APIUrl;
+            }
+        }
 
         private static string _APIKey = string.Empty;
-        public static string APIKey { get { return _APIKey; } }
+        public static string APIKey
+        {
+            get
+            {
+                _APIKey = GetConfigValue(GWConstants.PROPS_REBUILD_API_KEY);
+                return _APIKey;
+            }
+        }
 
         static GWUtility()
         {
@@ -56,6 +70,19 @@ namespace Glasswall.FileHandler
         public static void WriteErrorLog(string message)
         {
             logger.WriteTrace(0, logErrorCategory, TraceSeverity.Unexpected, message);
+        }
+
+        private static string GetConfigValue(string configKey)
+        {
+            SPFarm farmObject = SPFarm.Local;
+            if (farmObject.Properties != null && farmObject.Properties.Count > 0)
+            {
+                if (farmObject.Properties.ContainsKey(configKey))
+                {
+                    return Convert.ToString(farmObject.Properties[configKey]);
+                }
+            }
+            return string.Empty;
         }
     }
 }
