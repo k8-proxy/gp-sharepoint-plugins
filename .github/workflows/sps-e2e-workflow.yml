@@ -1,0 +1,45 @@
+name: 'SPS FH E2E Test Workflow'
+
+on:
+  push:
+    paths: 
+      - 'SelfHosted/src/Glasswall.FileHandler/**'
+    
+  workflow_dispatch:
+    paths: 
+      - 'SelfHosted/src/Glasswall.FileHandler/**'
+
+
+defaults:
+  run:
+    working-directory: './SelfHosted'
+
+jobs:
+  e2e:
+    name: 'E2E FileHandler Test' 
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './SelfHosted/selfhosted-filehandler-test'
+    environment: GW-DEV
+    env:
+      SP_URL: ${{ secrets.SPS_URL }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Use Node.js 15.x
+      uses: actions/setup-node@v1
+      
+    - run: npm install -g @getgauge/cli
+      name: Install Gauge
+
+    - uses: microsoft/playwright-github-action@v1
+
+    - run: npm install
+      name: Install dependencies
+
+    - run: npm run test-ci
+      name: Run E2E tests
+    
