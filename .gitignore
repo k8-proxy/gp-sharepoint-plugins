@@ -352,7 +352,7 @@ MigrationBackup/
 .env
 
 # Gauge CI env
-aut.properties
+auth.properties
 
 # Gauge - metadata dir
 .gauge

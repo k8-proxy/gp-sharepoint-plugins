@@ -7,7 +7,6 @@ const browserType = 'chromium'; // ['chromium', 'firefox', 'webkit']
 let browser;
 let context;
 let page;
-const fs = require('fs');
 
 // ---------------
 // Execution Hooks
@@ -23,17 +22,19 @@ afterSuite(async () => {
 });
 
 beforeSpec(async () => {
-
-    // Create a new context with the saved storage state
-    const storageState = JSON.parse(process.env.STORAGE);
-    const context = await browser.newContext({ storageState });
-
+    context = await browser.newContext();
     page = await context.newPage();
 
     // Login to the AUT
     const app_endpoint = process.env.SP_URL
     await page.goto(app_endpoint);
 
+    //await page.waitForSelector("//input[@name='loginfmt']");
+    //await page.type("//input[@name='loginfmt']", process.env.SP_USER);
+    //await page.click("//input[@value='Next']");
+    //await page.type("//input[@name='passwd']", process.env.SP_USER_PWD);
+    //await page.click("//input[@value='Sign in']");
+    //await page.click("//input[@value='Yes']");
 });
 
 afterSpec(async () => {
