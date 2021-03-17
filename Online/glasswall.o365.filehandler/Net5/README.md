@@ -1,6 +1,6 @@
-# Glasswall File Handler for Download in Office 365
+# Glasswall File Handler for Download in Office 365 (Sharepoint Online / OneDrive Online)
 
-This project provides the implementation of a file handler 2.0 for Microsoft Office 365.
+This project provides the implementation of a file handler 2.0 for Microsoft Office 365 (Sharepoint Online / OneDrive Online).
 This file handler exposes a custom action, with the **Download (Glasswall)** action added to all files. The action when invoked will read the file content from O365, perform file rebuild using Glasswall rebuild API and then download the file.
 
 ## Getting Started
