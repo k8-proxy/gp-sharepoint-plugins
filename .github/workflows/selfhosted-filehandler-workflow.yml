@@ -59,6 +59,7 @@ jobs:
         path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1
 
   deploy:
+    if: contains(github.ref, '/main')
     needs: build
     name: 'Deploy FileHandler'
     runs-on: self-hosted
