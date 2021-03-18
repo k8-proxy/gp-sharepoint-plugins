@@ -60,6 +60,7 @@ jobs:
 
   deploy:
     if: contains(github.ref, '/main')
+    environment: GW-DEV
     needs: build
     name: 'Deploy FileHandler'
     runs-on: self-hosted
@@ -85,7 +86,6 @@ jobs:
     defaults:
       run:
         working-directory: './SelfHosted/selfhosted-filehandler-test'
-    environment: GW-DEV
     env:
       SP_URL: ${{ secrets.SPS_URL }}
       
