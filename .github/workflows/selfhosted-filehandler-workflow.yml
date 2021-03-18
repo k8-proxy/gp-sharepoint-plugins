@@ -86,7 +86,6 @@ jobs:
     defaults:
       run:
         working-directory: './SelfHosted/selfhosted-filehandler-test'
-    environment: GW-DEV
     env:
       SP_URL: ${{ secrets.SPS_URL }}
       
