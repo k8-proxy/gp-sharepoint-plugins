@@ -24,8 +24,13 @@ afterSuite(async () => {
 
 beforeSpec(async () => {
 
+    const fsPromises = require('fs').promises;
+    const homeDir = require('os').homedir();
+    const data = await fsPromises.readFile(`${homeDir}/secrets/spo_auth.json`)
+                     .catch((err) => console.error('Failed to read file', err));
     // Create a new context with the saved storage state
-    const storageState = JSON.parse(process.env.STORAGE);
+    const storageState = JSON.parse(data.toString());
+
     const context = await browser.newContext({ storageState });
 
     page = await context.newPage();
