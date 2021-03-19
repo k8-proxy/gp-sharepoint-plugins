@@ -59,6 +59,8 @@ jobs:
         path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1
 
   deploy:
+    if: contains(github.ref, '/main')
+    environment: GW-DEV
     needs: build
     name: 'Deploy FileHandler'
     runs-on: self-hosted
@@ -76,3 +78,33 @@ jobs:
       run: |
         Add-PsSnapin Microsoft.SharePoint.PowerShell
         ${{ env.ARTIFACTS_DIR_ABSOLUTE }}/InstallFileHandler.ps1 ${{ env.ARTIFACTS_DIR_ABSOLUTE }}
+
+  e2e:
+    needs: deploy
+    name: 'E2E FileHandler Test' 
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: './SelfHosted/selfhosted-filehandler-test'
+    env:
+      SP_URL: ${{ secrets.SPS_URL }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Use Node.js 15.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 15.x
+      
+    - run: npm install -g @getgauge/cli
+      name: Install Gauge
+
+    - uses: microsoft/playwright-github-action@v1
+
+    - run: npm install
+      name: Install dependencies
+
+    - run: npm run test-ci
+      name: Run E2E tests

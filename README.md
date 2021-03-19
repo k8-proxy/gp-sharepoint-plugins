@@ -1,5 +1,5 @@
 # Introduction 
-This repository contains a collection of Sharepoint Solutions and Extensions that provides Sharepoint integration for the Glasswall Rebuild Solution, both self hosted and online.
+This repository contains a collection of Sharepoint Solutions and Extensions that provides Sharepoint integration for the Glasswall Rebuild Solution, both server and online.
 
 
 ## ONLINE
@@ -14,11 +14,11 @@ The solution is both available for .Net Framework and .Net (Core & 5x)
 This solution contains SPFx Extension of Application Customizer type. It executes script to hide the default Download button for SharePoint online (Office365) Site.
 
 ### Download Extension (Work In Progress)
-This solution contains SPFx Extension of Application Customizer type. It executes script to insert a custom Download button for SharePoint online (Office365) Site, allowinf full control on its action.
+This solution contains SPFx Extension of Application Customizer type. It executes script to insert a custom Download button for SharePoint online (Office365) Site, allowing full control on its action.
 
 
 ### Embed Script Extension
 todo
 
-## SELF-HOSTED
+## SERVER
 The file handler allows downloading and uploading a file by rebuilding the file using Glasswall Rebuild Api. The rebuild engine endpoint as well as the file types to trigger are configurable.
