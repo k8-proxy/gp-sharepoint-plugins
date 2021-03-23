@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './SelfHosted/selfhosted-filehandler-test'
+        working-directory: './SelfHosted/selfhosted-filehandler-tests'
     env:
       SP_URL: ${{ secrets.SPS_URL }}
       
