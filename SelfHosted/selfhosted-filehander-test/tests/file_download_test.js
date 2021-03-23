@@ -61,14 +61,13 @@ step("Select file <file_name>", async (file_name) => {
     else {
         //console.log("File is already selected")
     }
-
 });
 
 step("Download selected file(s) via Context Menu", async () => {
 
    // await page.click("//div[contains(@class,'is-checked')]/following::i[@data-icon-name='MoreVertical']");
     await page.click("//div[@aria-label='Download']");
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
 
     await page.waitForTimeout(35000);
@@ -78,7 +77,7 @@ step("Download selected file(s) via Action Bar", async () => {
 
     await page.click("//button[@aria-label='Show actions']");
     await page.click("//div[@aria-label='Download']");
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
 
     await page.waitForTimeout(15000);
@@ -94,7 +93,7 @@ if (!Extensions.exec(file_name)) {
     const fileNameSelector = "//div[@data-automationid='DetailsRowFields']//a[@title='" + file_name + "']"
     page.waitForSelector(fileNameSelector)
     await page.click(fileNameSelector);
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
     await page.waitForTimeout(25000);
 
