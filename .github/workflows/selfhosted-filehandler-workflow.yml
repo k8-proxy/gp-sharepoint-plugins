@@ -105,6 +105,12 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - uses: nev7n/wait_for_response@v1
+      with:
+        url:  ${{ env.SP_URL }}
+        responseCode: 200
+        interval: 1000
+
     - name: Run E2E tests
       run: npm run test-ci
       
