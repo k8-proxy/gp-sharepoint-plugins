@@ -83,6 +83,7 @@ jobs:
     needs: deploy
     name: 'E2E FileHandler Test' 
     runs-on: ubuntu-latest
+    environment: GW-DEV
     defaults:
       run:
         working-directory: './SelfHosted/selfhosted-filehandler-tests'
