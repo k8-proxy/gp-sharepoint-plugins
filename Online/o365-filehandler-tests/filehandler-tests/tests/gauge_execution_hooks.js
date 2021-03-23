@@ -43,11 +43,10 @@ beforeSpec(async () => {
 
 afterSpec(async () => {
     // Closes the browser context. All the pages that belong to the browser context will be closed.
-    await context.close();
+    await page.context().close();
 });
 
 beforeScenario(async () => {
-    gauge.dataStore.scenarioStore.put('context', context);
     gauge.dataStore.scenarioStore.put('page', page);
 
 });
@@ -62,7 +61,6 @@ beforeStep(async function () {
 
 afterStep(async function () {
     // After every step, update scenarioStore.page with the current page
-    gauge.dataStore.scenarioStore.put('context', context);
     gauge.dataStore.scenarioStore.put('page', page);
 });
 
