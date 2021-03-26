@@ -362,3 +362,5 @@ logs
 
 # Gauge - reports dir
 reports
+
+*.DS_Store
