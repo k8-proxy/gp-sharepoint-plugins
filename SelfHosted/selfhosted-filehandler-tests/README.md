@@ -75,7 +75,3 @@ Scope: Verify default download button is not visible Context menu, Action bar, a
 1. Tested default download button is hidden from the user on the Action Bar.
 2. Tested default download button is not visible to the user on the Context Menu.
 3. Validate default download button is hidden for user on file preview.
-
-# File Handler Test Specification
-
-D
