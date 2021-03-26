@@ -39,7 +39,7 @@ beforeSpec(async () => {
 
 afterSpec(async () => {
     // Closes the browser context. All the pages that belong to the browser context will be closed.
-    await context.close();
+    await page.context().close();
 });
 
 beforeScenario(async () => {
