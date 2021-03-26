@@ -13,7 +13,6 @@ let context;
 // --------------------------
 beforeStep(async function () {
     // async code for before step
-    context = gauge.dataStore.scenarioStore.get('context');
     page = gauge.dataStore.scenarioStore.get('page');
 
 });
@@ -77,7 +76,7 @@ step("Download selected file(s) via Context Menu", async () => {
 
     await page.click("//div[contains(@class,'is-checked')]/following::i[@data-icon-name='MoreVertical']");
     await page.click("//span[text()= 'Download (Glasswall)']");
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
 
     await page.waitForTimeout(35000);
@@ -87,7 +86,7 @@ step("Download selected file(s) via Action Bar", async () => {
 
     await page.click("//i[@data-icon-name='More']");
     await page.click("//span[text()= 'Download (Glasswall)']");
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
 
     await page.waitForTimeout(15000);
@@ -110,7 +109,7 @@ step("Download the Previewed file", async () => {
     const downloadButton = "//span[text()= 'Download (Glasswall)']"
     page.waitForSelector(downloadButton)
     await page.click(downloadButton);
-    const client = await context.newCDPSession(page);
+    const client = await page.context().newCDPSession(page);
     await client.send("Page.setDownloadBehavior", { behavior: "allow", downloadPath: "./resources/downloaded_files" });
 
     await page.waitForTimeout(20000);

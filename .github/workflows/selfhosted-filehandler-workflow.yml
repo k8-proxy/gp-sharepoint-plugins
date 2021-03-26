@@ -59,6 +59,8 @@ jobs:
         path: ${{ github.workspace }}/${{ env.INSTALLER_FOLDER }}/*.ps1
 
   deploy:
+    if: contains(github.ref, '/main')
+    environment: GW-DEV
     needs: build
     name: 'Deploy FileHandler'
     runs-on: self-hosted
@@ -81,10 +83,10 @@ jobs:
     needs: deploy
     name: 'E2E FileHandler Test' 
     runs-on: ubuntu-latest
+    environment: GW-DEV
     defaults:
       run:
-        working-directory: './SelfHosted/selfhosted-filehandler-test'
-    environment: GW-DEV
+        working-directory: './SelfHosted/selfhosted-filehandler-tests'
     env:
       SP_URL: ${{ secrets.SPS_URL }}
       
@@ -97,13 +99,18 @@ jobs:
       with:
         node-version: 15.x
       
-    - run: npm install -g @getgauge/cli
-      name: Install Gauge
+    - name: Install Gauge
+      run: npm install -g @getgauge/cli
 
-    - uses: microsoft/playwright-github-action@v1
+    - name: Install dependencies
+      run: npm install
 
-    - run: npm install
-      name: Install dependencies
+    - uses: nev7n/wait_for_response@v1
+      with:
+        url:  ${{ env.SP_URL }}
+        responseCode: 401
+        interval: 500
 
-    - run: npm run test-ci
-      name: Run E2E tests
+    - name: Run E2E tests
+      run: npm run test-ci
+      
