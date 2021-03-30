@@ -1,4 +1,4 @@
-Site File Handler Test Specification
+Site Collection File Handler Test Specification
 ==========================================
 tags: site-collection-file-handler
 
