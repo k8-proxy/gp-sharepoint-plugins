@@ -22,6 +22,7 @@ npm test
 # Basic Authentication with gauge env/default/auth.properties
 ```
 SP_URL=http://USERNAME:PASSWORD@SELF_HOSTED_SITE_IP
+SITE_NAME= The Sharepoint Site Name(Case Sensitive).  E.g. Test Collection Site
 ```
 
 # Execute Tests
