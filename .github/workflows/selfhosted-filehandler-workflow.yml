@@ -89,6 +89,7 @@ jobs:
         working-directory: './SelfHosted/selfhosted-filehandler-tests'
     env:
       SP_URL: ${{ secrets.SPS_URL }}
+      SITE_NAME: ${{ secrets.SPS_SITE_NAME }}
       
     steps:
     - name: Checkout code
