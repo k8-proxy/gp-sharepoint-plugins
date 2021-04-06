@@ -43,7 +43,6 @@ afterSpec(async () => {
 });
 
 beforeScenario(async () => {
-    gauge.dataStore.scenarioStore.put('context', context);
     gauge.dataStore.scenarioStore.put('page', page);
 
 });
@@ -58,8 +57,7 @@ beforeStep(async function () {
 
 afterStep(async function () {
     // After every step, update scenarioStore.page with the current page
-    gauge.dataStore.scenarioStore.put('context', context);
-    gauge.dataStore.scenarioStore.put('page', page);
+    //gauge.dataStore.scenarioStore.put('page', page);
 });
 
 gauge.customScreenshotWriter = async function () {

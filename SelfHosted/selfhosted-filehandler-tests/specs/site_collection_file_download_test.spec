@@ -1,19 +1,20 @@
-OneDrive File Handler Test Specification
+Site Collection File Handler Test Specification
 ==========================================
+tags: site-collection-file-handler
 
-tags: onedrive-file-handler
 |file_name                          |
 |-----------------------------------|
 |TestAutoCurExecuteJavaScriptPDF.pdf|
 
 
-Download OneDrive file via Context Menu
+
+Download Site file via Context Menu
 ------------------------------------------------------------
-tags: onedrive-file-handler, onedrive-context-menu
+tags: site-collection-context-menu
 
 
-* Open hamburg menu
-* Select OneDrive
+* Naviagte to SharePoint Home page
+* Naviagte to Choosen site Documents section
 * Upload file <file_name>
 * Select file <file_name>
 * Download selected file(s) via Context Menu
@@ -21,27 +22,26 @@ tags: onedrive-file-handler, onedrive-context-menu
 * Delete selected file(s)
 
 
-Download OneDrive file via Action Bar
+Download Site file via Action Bar
 ------------------------------------------------------------
-tags: onedrive-file-handler, onedrive-action-bar
+tags: site-collection-action-bar
 
-
-* Open hamburg menu
-* Select OneDrive
+* Naviagte to SharePoint Home page
+* Naviagte to Choosen site Documents section
 * Upload file <file_name>
 * Select file <file_name>
-* Download OneDrive file <file_name> via Action Bar
+* Download selected file(s) via Action Bar
 * Compare file <file_name> with the clean file
 * Delete selected file(s)
 
 
-Download the OneDrive Previewed file
+Download the Site Previewed file
 ------------------------------------------------------------
-tags: onedrive-file-handler, onedrive-preview-page
+tags: site-collection-preview-page
 
 
-* Open hamburg menu
-* Select OneDrive
+* Naviagte to SharePoint Home page
+* Naviagte to Choosen site Documents section
 * Upload file <file_name>
 * Download the Previewed file <file_name>
 * Compare file <file_name> with the clean file
