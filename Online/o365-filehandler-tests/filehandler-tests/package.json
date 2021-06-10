@@ -7,7 +7,7 @@
     "test-ci": "gauge run --env ci specs/"
   },
   "dependencies": {
-    "chai": "latest",
+    "chai": "4.3.4",
     "filecompare": "^1.0.4",
     "playwright": "latest"
   },
