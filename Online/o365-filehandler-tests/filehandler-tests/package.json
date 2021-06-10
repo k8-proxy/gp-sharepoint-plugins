@@ -9,7 +9,7 @@
   "dependencies": {
     "chai": "latest",
     "filecompare": "^1.0.4",
-    "playwright": "latest"
+    "playwright": "1.11.0"
   },
   "devDependencies": {}
 }
